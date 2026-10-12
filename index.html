@@ -125,6 +125,7 @@ h1{font-family:'Syne',sans-serif;font-size:clamp(32px,6vw,58px);font-weight:800;
 </style>
 </head>
 <body>
+<div class="screen" id="boot"><div class="n-sub" id="bt">Cargando…</div></div>
 <div class="screen" id="auth" hidden>
   <div class="header-badge">⚡ Modo Repaso</div>
   <div class="n-title">Accede a tus apuntes</div>
@@ -179,6 +180,7 @@ h1{font-family:'Syne',sans-serif;font-size:clamp(32px,6vw,58px);font-weight:800;
   </div>
 </div>
 
+<script>window.onerror=function(m){var t=document.getElementById('bt'),b=document.getElementById('boot');if(t&&b&&!b.hidden)t.textContent='Error al arrancar: '+m};</script>
 <script>
 const $=s=>document.querySelector(s);
 const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
@@ -324,7 +326,7 @@ function claveUsuario(nombre) {
     }
 
 let view='',manage=false,fb=null;
-function show(v){view=v;$('#auth').hidden=v!=='auth';$('#home').hidden=v!=='home';$('#app').hidden=v!=='app';scrollTo(0,0)}
+function show(v){view=v;$('#boot').hidden=true;$('#auth').hidden=v!=='auth';$('#home').hidden=v!=='home';$('#app').hidden=v!=='app';scrollTo(0,0)}
 function amsg(t){const m=$('#amsg');m.replaceChildren();if(t)m.append(h('div','error-box',t))}
 function renderHome(){
   const g=$('#hgrid');g.replaceChildren();
@@ -362,12 +364,12 @@ $('#p').onkeydown=e=>{if(e.key==='Enter')entrar()};
 $('#mng').onclick=()=>{manage=!manage;renderHome()};
 $('#out').onclick=()=>fb&&fb.out(fb.auth);
 $('#back').onclick=home;
+setTimeout(()=>{if(!view){show('auth');amsg('El servidor de cuentas no responde. Comprueba tu conexión y recarga la página.')}},8000);
 (async()=>{
   const V='https://www.gstatic.com/firebasejs/10.12.2/';
   try{
     const {initializeApp}=await import(V+'firebase-app.js'),{getDatabase,ref,get}=await import(V+'firebase-database.js'),A=await import(V+'firebase-auth.js');
     const app=initializeApp(firebaseConfig),auth=A.getAuth(app);
-    await A.setPersistence(auth,A.browserLocalPersistence);
     fb={auth,db:getDatabase(app,firebaseConfig.databaseURL),ref,get,signIn:A.signInWithEmailAndPassword,out:A.signOut};
     A.onAuthStateChanged(auth,u=>{
       if(u){loadState(u.uid);$('#who').textContent='👤 '+(u.displayName||(u.email||'').split('@')[0]||'Usuario');$('#p').value='';home()}
