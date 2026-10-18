@@ -3,379 +3,3469 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Visor de apuntes</title>
+<meta name="theme-color" content="#0a0a0f">
+<title>Mis Apuntes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap">
 <style>
-:root{--bg:#0a0a0f;--surface:#12121a;--card:#1a1a28;--border:#2a2a40;--neon-pink:#ff2d78;--neon-cyan:#00f5d4;--neon-yellow:#ffe600;--neon-purple:#a855f7;--text:#e8e8f0;--muted:#6b6b8a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box;margin:0;padding:0}
-[hidden]{display:none!important}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(255,45,120,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 80%,rgba(0,245,212,.06) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 60% 10%,rgba(168,85,247,.05) 0%,transparent 60%);pointer-events:none;z-index:0}
-.container{max-width:900px;margin:0 auto;padding:40px 20px;position:relative;z-index:1}
-header{text-align:center;padding:60px 0 40px}
-.header-badge{display:inline-block;background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));color:#fff;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;padding:6px 16px;border-radius:20px;margin-bottom:20px;text-transform:uppercase}
-h1{font-family:'Syne',sans-serif;font-size:clamp(32px,6vw,58px);font-weight:800;line-height:1.1;background:linear-gradient(135deg,#fff 30%,var(--neon-cyan) 70%,var(--neon-pink) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;overflow-wrap:anywhere}
-.subtitle{color:var(--muted);font-size:16px;max-width:500px;margin:0 auto}
-.drop{border:2px dashed var(--border);border-radius:16px;background:var(--surface);padding:36px 20px;text-align:center;margin-bottom:24px;transition:border-color .2s,background .2s}
-.drop.over{border-color:var(--neon-cyan);background:rgba(0,245,212,.08)}
-.drop-t{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
-.drop-s{color:var(--muted);font-size:14px;line-height:1.6;max-width:460px;margin:8px auto 18px}
-.drop.compact{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:14px 18px}
-.drop.compact .drop-t{font-size:14px;font-weight:600;color:var(--muted)}
-.drop.compact .drop-s{display:none}
-.drop.compact .glow-btn{padding:8px 18px;font-size:13px}
-#status{margin-bottom:24px}
-#status .answer-box,#status .error-box{margin-top:0;margin-bottom:10px;font-size:14px}
-#status .answer-box div+div,#status .error-box div+div{margin-top:4px}
-.topic-nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:40px}
-#subs{margin-bottom:14px}
-#subs:empty,#nav:empty{display:none}
-.topic-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;transition:all .2s}
-.topic-btn:hover,.topic-btn.active{border-color:var(--neon-cyan);color:var(--neon-cyan);background:rgba(0,245,212,.08)}
-.sub-tab{display:inline-flex}
-.sub-tab .topic-btn{border-radius:8px 0 0 8px}
-.sub-tab .x{background:var(--card);border:1px solid var(--border);border-left:0;color:var(--muted);border-radius:0 8px 8px 0;padding:0 10px;cursor:pointer;font-size:16px}
-.sub-tab.active .x{border-color:var(--neon-cyan)}
-.sub-tab .x:hover{color:var(--neon-pink);background:rgba(255,45,120,.1)}
-.section-header{display:flex;align-items:center;gap:14px;margin:40px 0 20px}
-.section-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.section-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700}
-.section-count{margin-left:auto;flex-shrink:0;background:rgba(255,45,120,.15);color:var(--neon-pink);font-family:'Space Mono',monospace;font-size:12px;padding:3px 10px;border-radius:20px;border:1px solid rgba(255,45,120,.3)}
-.concept-card{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:14px;overflow:hidden;transition:border-color .2s,transform .15s;animation:fadeInUp .3s ease both}
-.concept-card:hover{border-color:var(--neon-cyan);transform:translateY(-1px)}
-.concept-header{padding:18px 20px;cursor:pointer;display:flex;align-items:flex-start;gap:14px;user-select:none}
-.concept-q{flex:1;font-size:15px;line-height:1.5;font-weight:500}
-.concept-q .tag{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;margin-right:8px;vertical-align:middle}
-.tag-art{background:rgba(255,45,120,.2);color:var(--neon-pink);border:1px solid rgba(255,45,120,.3)}
-.tag-def{background:rgba(0,245,212,.15);color:var(--neon-cyan);border:1px solid rgba(0,245,212,.3)}
-.tag-key{background:rgba(168,85,247,.2);color:var(--neon-purple);border:1px solid rgba(168,85,247,.3)}
-.tag-req{background:rgba(255,230,0,.15);color:var(--neon-yellow);border:1px solid rgba(255,230,0,.3)}
-.tag-tabla{background:rgba(0,200,255,.15);color:#00c8ff;border:1px solid rgba(0,200,255,.3)}
-.tag-practica{background:rgba(100,255,150,.15);color:#64ff96;border:1px solid rgba(100,255,150,.3)}
-.tag-fuente{background:rgba(255,100,50,.15);color:#ff6432;border:1px solid rgba(255,100,50,.3)}
-.tag-tip{background:rgba(200,100,255,.15);color:#c864ff;border:1px solid rgba(200,100,255,.3)}
-.toggle-icon{color:var(--muted);font-size:20px;transition:transform .3s;flex-shrink:0;margin-top:2px}
-.concept-card.open .toggle-icon{transform:rotate(45deg);color:var(--neon-cyan)}
-.concept-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
-.concept-card.open .concept-body{display:block}
-.answer-box{background:rgba(0,245,212,.05);border:1px solid rgba(0,245,212,.2);border-radius:10px;padding:16px;margin-top:14px}
-.answer-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--neon-cyan);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.answer-label::before{content:'';display:inline-block;width:16px;height:2px;background:var(--neon-cyan)}
-.answer-text{font-size:14px;line-height:1.7;color:var(--text)}
-.answer-text strong{color:var(--neon-cyan)}
-.answer-text em{color:var(--neon-yellow);font-style:normal}
-.answer-text ul,.answer-text ol{margin:8px 0 8px 18px}
-.answer-text li{margin-bottom:4px}
-.concept-body p{margin-bottom:8px}
-.concept-body p:last-child{margin-bottom:0}
-#nav .topic-btn{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.answer-text ul li::marker{color:var(--neon-cyan)}
-.error-box{background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.25);border-radius:10px;padding:14px 16px;margin-top:10px;font-size:13px;color:#ff8ab0;line-height:1.6}
-.error-box::before{content:'⚠ Atención: ';font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--neon-pink);text-transform:uppercase;display:block;margin-bottom:6px}
-.formula{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--neon-yellow);border-radius:8px;padding:14px 16px;margin-top:10px;font-family:'Space Mono',monospace;font-size:13px;color:var(--neon-yellow);line-height:1.8}
-.formula-title{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
-.grid-2{display:grid;grid-template-columns:repeat(var(--n,2),minmax(0,1fr));gap:10px;margin-top:10px}
-@media(max-width:600px){.grid-2{grid-template-columns:1fr}header{padding:36px 0 28px}}
-.mini-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6}
-.mini-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--neon-pink);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
-.tbl-wrap{overflow-x:auto;margin-top:12px}
-.data-table{width:100%;border-collapse:collapse;font-size:13px}
-.data-table th{background:rgba(0,245,212,.1);color:var(--neon-cyan);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
-.data-table td{padding:10px 14px;border-bottom:1px solid rgba(42,42,64,.5);line-height:1.5}
-.data-table tr:hover td{background:rgba(255,255,255,.02)}
-.blockquote{border-left:3px solid var(--neon-purple);background:rgba(168,85,247,.07);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:10px;font-size:13px;color:#d0b8f0;line-height:1.7;font-style:italic}
-.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:40px 0}
-.glow-btn{background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));border:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:12px 28px;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;box-shadow:0 0 20px rgba(255,45,120,.3)}
-.glow-btn:hover{opacity:.9;transform:translateY(-1px)}
-.concept-header:focus-visible,.topic-btn:focus-visible,.glow-btn:focus-visible,.x:focus-visible{outline:2px solid var(--neon-cyan);outline-offset:2px}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ============ Tokens (los mismos de tus apuntes) ============ */
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --card: #1a1a28;
+  --border: #2a2a40;
+  --neon-pink: #ff2d78;
+  --neon-cyan: #00f5d4;
+  --neon-yellow: #ffe600;
+  --neon-purple: #a855f7;
+  --text: #e8e8f0;
+  --muted: #6b6b8a;
+  --muted-text: #8e8eb0; /* mismo tono, un poco más claro para que el texto pequeño se lea bien */
+  --f-display: 'Syne', 'Segoe UI', system-ui, sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --f-body: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: dark;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); background: var(--bg); }
 
-.screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;position:relative;z-index:1;text-align:center}
-.n-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,5vw,44px);line-height:1.15;background:linear-gradient(135deg,#fff 30%,var(--neon-cyan) 70%,var(--neon-pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
-.n-sub{color:var(--muted);font-size:14px;margin-bottom:36px;max-width:460px}
-.n-grid{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;max-width:900px}
-.ncard{width:130px;background:none;border:0;cursor:pointer;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;transition:color .25s}
-.av{width:120px;height:120px;border-radius:16px;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:46px;transition:all .25s}
-.ncard:hover,.ncard:focus-visible{color:var(--neon-cyan);outline:none}
-.ncard:hover .av,.ncard:focus-visible .av{border-color:var(--neon-cyan);box-shadow:0 0 25px rgba(0,245,212,.35);transform:scale(1.08) translateY(-5px)}
-.ncard.add .av{border-style:dashed;font-size:40px;color:var(--muted)}
-.ncard.manage .av{border-color:var(--neon-yellow);box-shadow:0 0 15px rgba(255,230,0,.2)}
-.ncard.manage:hover .av{border-color:var(--neon-pink);box-shadow:0 0 25px rgba(255,45,120,.4)}
-.ncard .del{display:none;position:absolute;top:0;left:5px;width:120px;height:120px;border-radius:16px;background:rgba(10,10,15,.7);font-size:34px;align-items:center;justify-content:center}
-.ncard.manage .del{display:flex}
-.n-foot{margin-top:36px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
-.pill{font-family:'Space Mono',monospace;font-size:12px;color:var(--neon-cyan);border:1px solid rgba(0,245,212,.3);background:rgba(0,245,212,.08);padding:6px 14px;border-radius:20px}
-#hstatus{width:100%;max-width:560px;margin-top:28px;text-align:left}
-#hstatus .answer-box,#hstatus .error-box{margin:0 0 10px;font-size:14px}
-.auth-card{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 24px;text-align:left}
-.auth-card label{display:block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--neon-cyan);margin:14px 0 6px}
-.auth-card label:first-child{margin-top:0}
-.auth-card input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px 14px;font:inherit;font-size:15px}
-.auth-card input:focus{outline:none;border-color:var(--neon-cyan)}
-.auth-card .glow-btn{width:100%;margin-top:20px}
-.auth-card .glow-btn:disabled{opacity:.5;cursor:wait}
-#amsg .error-box{margin-top:14px;font-size:13px}
-.topbar{text-align:left}
-.topbar+header{padding-top:24px}
-#subs{display:none!important}
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--f-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(255,45,120,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(0,245,212,.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 60% 10%, rgba(168,85,247,.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 2px solid var(--neon-cyan); outline-offset: 2px; }
+button { font-family: inherit; color: inherit; }
+
+/* ============ Cabecera ============ */
+header { text-align: center; padding: 60px 0 44px; }
+
+.header-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  color: #fff;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-family: var(--f-display);
+  font-size: clamp(32px, 6vw, 58px);
+  font-weight: 800;
+  line-height: 1.1;
+  padding-bottom: .06em;
+  background: linear-gradient(135deg, #fff 30%, var(--neon-cyan) 70%, var(--neon-pink) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+}
+
+.subtitle { color: var(--muted-text); font-size: 16px; max-width: 540px; margin: 0 auto 26px; line-height: 1.6; }
+
+.stats-bar { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.stat-pill {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 8px 20px;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot.c { background: var(--neon-cyan); }
+.dot.p { background: var(--neon-pink); }
+.dot.y { background: var(--neon-yellow); }
+
+/* ============ Botones ============ */
+.glow-btn {
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  border: none;
+  color: #fff;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+  box-shadow: 0 0 20px rgba(255,45,120,.3);
+}
+.glow-btn:hover { opacity: .9; transform: translateY(-1px); }
+.glow-btn:disabled { opacity: .5; cursor: progress; transform: none; }
+.glow-btn.block { display: block; width: 100%; }
+.glow-btn.small { padding: 9px 22px; font-size: 13px; }
+
+.ghost-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 11px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color .2s, color .2s, background .2s;
+}
+.ghost-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,245,212,.08); }
+.ghost-btn.small { padding: 7px 12px; font-size: 12px; }
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* ============ Zona de subida ============ */
+.drop {
+  position: relative;
+  border: 2px dashed var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  padding: 44px 24px 38px;
+  text-align: center;
+  transition: border-color .2s, background .2s, box-shadow .25s;
+}
+.drop.over {
+  border-style: solid;
+  border-color: var(--neon-cyan);
+  background: rgba(0,245,212,.06);
+  box-shadow: 0 0 0 4px rgba(0,245,212,.08), 0 0 56px rgba(0,245,212,.16);
+}
+
+.braces {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 38px;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(64px, 14vw, 104px);
+  line-height: 1;
+  margin-bottom: 18px;
+  transition: gap .35s cubic-bezier(.2, .8, .2, 1);
+}
+.braces .b {
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.braces .b.r { background-image: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan)); }
+.braces .ext {
+  font-family: var(--f-mono);
+  font-weight: 700;
+  font-size: clamp(14px, 3vw, 18px);
+  color: var(--neon-cyan);
+  min-width: 6ch;
+}
+.braces .ext .go { display: none; color: var(--neon-yellow); }
+.drop.over .braces { gap: 8px; }
+.drop.over .braces .ext .rest { display: none; }
+.drop.over .braces .ext .go { display: inline; }
+
+.drop-title { font-family: var(--f-display); font-weight: 700; font-size: 20px; margin-bottom: 6px; }
+.drop-sub { color: var(--muted-text); font-size: 14px; margin-bottom: 22px; line-height: 1.5; }
+.drop-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+.paste { margin-top: 14px; }
+.paste textarea {
+  width: 100%;
+  min-height: 190px;
+  resize: vertical;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  color: var(--text);
+  font-family: var(--f-mono);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.paste textarea::placeholder { color: var(--muted-text); }
+.paste textarea:focus-visible { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(0,245,212,.12); }
+.paste-actions { display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end; flex-wrap: wrap; }
+
+/* ============ Informe de carga ============ */
+.report { margin-top: 16px; display: grid; gap: 10px; }
+.report-actions { display: flex; justify-content: flex-end; margin-top: 2px; }
+.report-title { font-family: var(--f-mono); font-size: 11px; letter-spacing: 2px; color: var(--muted-text); text-transform: uppercase; }
+
+.res { border-radius: 12px; padding: 14px 16px; border: 1px solid; font-size: 13px; line-height: 1.6; }
+.res.ok   { background: rgba(0,245,212,.05); border-color: rgba(0,245,212,.25); }
+.res.warn { background: rgba(255,230,0,.06); border-color: rgba(255,230,0,.25); }
+.res.err  { background: rgba(255,45,120,.07); border-color: rgba(255,45,120,.28); }
+.res.info { background: var(--surface); border-color: var(--border); }
+.res-head { display: flex; align-items: baseline; gap: 10px; }
+.res-icon { font-family: var(--f-mono); font-weight: 700; flex-shrink: 0; width: 14px; text-align: center; }
+.res-title { font-family: var(--f-display); font-weight: 700; font-size: 15px; line-height: 1.35; overflow-wrap: anywhere; }
+.res.ok .res-icon, .res.ok .res-title { color: var(--neon-cyan); }
+.res.warn .res-icon, .res.warn .res-title { color: var(--neon-yellow); }
+.res.err .res-icon, .res.err .res-title { color: #ff8ab0; }
+.res.info .res-icon, .res.info .res-title { color: var(--text); }
+.res-file { font-family: var(--f-mono); font-size: 11px; color: var(--muted-text); margin: 4px 0 0 24px; overflow-wrap: anywhere; }
+.res-line, .res ul, .res-hint, .snippet { margin-left: 24px; }
+.res-line { margin-top: 8px; color: var(--text); }
+.res ul { margin-top: 8px; padding-left: 18px; color: var(--text); }
+.res ul li { margin-bottom: 3px; }
+.res-hint { margin-top: 8px; color: var(--muted-text); }
+.snippet {
+  margin-top: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--neon-pink);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text);
+  overflow-x: auto;
+  white-space: pre;
+}
+.snippet .caret { color: var(--neon-pink); }
+
+.empty {
+  text-align: center;
+  color: var(--muted-text);
+  padding: 36px 18px;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.empty strong { color: var(--text); }
+
+/* ============ Visor de asignatura ============ */
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+.search { position: relative; flex: 1 1 240px; display: block; }
+.search svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted-text); pointer-events: none; }
+.search input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px 11px 38px;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.search input::placeholder { color: var(--muted-text); }
+.search input:focus-visible { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(0,245,212,.12); }
+.result-count { font-family: var(--f-mono); font-size: 12px; color: var(--muted-text); min-height: 18px; margin-bottom: 12px; }
+
+.topic-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.nav-pills { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.topic-nav.clamp:not(.open) .nav-pills {
+  max-height: 118px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 34px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 34px), transparent);
+}
+.nav-more { align-self: center; }
+
+.topic-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted-text);
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--f-body);
+  transition: all .2s;
+  max-width: min(100%, 260px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topic-btn:hover, .topic-btn.active { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,245,212,.08); }
+
+.section-header { display: flex; align-items: center; gap: 14px; margin: 40px 0 18px; }
+.section-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.section-title { font-family: var(--f-display); font-size: 22px; font-weight: 700; flex: 1; min-width: 0; overflow-wrap: anywhere; line-height: 1.25; }
+.section-count {
+  margin-left: auto;
+  white-space: nowrap;
+  background: rgba(255,45,120,.15);
+  color: var(--neon-pink);
+  font-family: var(--f-mono);
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,45,120,.3);
+}
+
+/* ---- tarjetas de concepto ---- */
+.concept-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color .2s, transform .15s;
+  animation: fadeInUp .3s ease both;
+}
+.concept-card:hover { border-color: var(--neon-cyan); transform: translateY(-1px); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.concept-header { padding: 18px 20px; cursor: pointer; display: flex; align-items: flex-start; gap: 14px; user-select: none; }
+.concept-header:focus-visible { outline-offset: -2px; border-radius: 16px; }
+.concept-q { flex: 1; min-width: 0; font-size: 15px; line-height: 1.5; font-weight: 500; overflow-wrap: anywhere; }
+.concept-q .tag { display: inline-block; font-family: var(--f-mono); font-size: 10px; line-height: 1.4; padding: 2px 8px; border-radius: 4px; margin-right: 8px; vertical-align: middle; }
+
+.tag-art      { background: rgba(255,45,120,.2);  color: var(--neon-pink);   border: 1px solid rgba(255,45,120,.3); }
+.tag-def      { background: rgba(0,245,212,.15);  color: var(--neon-cyan);   border: 1px solid rgba(0,245,212,.3); }
+.tag-key      { background: rgba(168,85,247,.2);  color: var(--neon-purple); border: 1px solid rgba(168,85,247,.3); }
+.tag-req      { background: rgba(255,230,0,.15);  color: var(--neon-yellow); border: 1px solid rgba(255,230,0,.3); }
+.tag-tabla    { background: rgba(0,200,255,.15);  color: #00c8ff;            border: 1px solid rgba(0,200,255,.3); }
+.tag-practica { background: rgba(100,255,150,.15); color: #64ff96;           border: 1px solid rgba(100,255,150,.3); }
+.tag-fuente   { background: rgba(255,100,50,.15); color: #ff6432;            border: 1px solid rgba(255,100,50,.3); }
+.tag-tip      { background: rgba(200,100,255,.15); color: #c864ff;           border: 1px solid rgba(200,100,255,.3); }
+
+.toggle-icon { color: var(--muted-text); font-size: 20px; line-height: 1; transition: transform .3s; flex-shrink: 0; margin-top: 2px; }
+.concept-card.open .toggle-icon { transform: rotate(45deg); color: var(--neon-cyan); }
+
+.concept-body { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border); }
+.concept-card.open .concept-body { display: block; }
+
+/* ---- bloques ---- */
+.answer-box { background: rgba(0,245,212,.05); border: 1px solid rgba(0,245,212,.2); border-radius: 10px; padding: 16px; margin-top: 14px; }
+.answer-label { font-family: var(--f-mono); font-size: 10px; letter-spacing: 2px; color: var(--neon-cyan); text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.answer-label::before { content: ''; display: inline-block; width: 16px; height: 2px; background: var(--neon-cyan); flex-shrink: 0; }
+.answer-text { font-size: 14px; line-height: 1.7; color: var(--text); overflow-wrap: anywhere; }
+.answer-text strong, .mini-card strong { color: var(--neon-cyan); }
+.answer-text em, .mini-card em { color: var(--neon-yellow); font-style: normal; }
+
+.blockquote {
+  border-left: 3px solid var(--neon-purple);
+  background: rgba(168,85,247,.07);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #d0b8f0;
+  line-height: 1.7;
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+.blockquote strong { color: #f0e4ff; }
+
+.error-box {
+  background: rgba(255,45,120,.07);
+  border: 1px solid rgba(255,45,120,.25);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #ff8ab0;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.error-box::before {
+  content: '⚠ Atención';
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--neon-pink);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+.error-box strong { color: #ffc2d6; }
+
+.formula {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--neon-yellow);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 10px;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  color: var(--neon-yellow);
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.formula .formula-title { font-size: 10px; letter-spacing: 2px; color: var(--muted-text); text-transform: uppercase; margin-bottom: 8px; }
+.formula strong { color: #fff; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-top: 10px; }
+.mini-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.6; min-width: 0; overflow-wrap: anywhere; }
+.mini-card .mini-title { font-family: var(--f-display); font-size: 12px; font-weight: 700; color: var(--neon-pink); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+
+.table-wrap { overflow-x: auto; margin-top: 12px; border-radius: 10px; scrollbar-color: var(--border) transparent; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  background: rgba(0,245,212,.1);
+  color: var(--neon-cyan);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  min-width: 96px;
+}
+.data-table td { padding: 10px 14px; border-bottom: 1px solid rgba(42,42,64,.5); line-height: 1.5; color: var(--text); vertical-align: top; min-width: 96px; }
+.data-table tr:hover td { background: rgba(255,255,255,.02); }
+.data-table strong { color: var(--text); }
+
+/* texto enriquecido (HTML ya limpiado) */
+.rich p { margin: 0 0 .6em; }
+.rich p:last-child { margin-bottom: 0; }
+.rich ul, .rich ol { margin: 8px 0 8px 18px; }
+.rich li { margin-bottom: 4px; }
+.rich ul li::marker { color: var(--neon-cyan); }
+.rich ol li::marker { color: var(--neon-pink); }
+.rich code { font-family: var(--f-mono); font-size: .92em; background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 4px; }
+.rich mark { background: rgba(255,230,0,.15); color: var(--neon-yellow); padding: 1px 6px; border-radius: 4px; }
+.rich sup, .rich sub { font-size: .75em; }
+
+/* ============ Diálogo ============ */
+dialog {
+  margin: auto;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 0;
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,.6), 0 0 40px rgba(168,85,247,.12);
+}
+dialog::backdrop { background: rgba(10,10,15,.82); backdrop-filter: blur(3px); }
+.dlg-body { padding: 24px 24px 6px; }
+.dlg-title { font-family: var(--f-display); font-weight: 700; font-size: 20px; line-height: 1.25; margin-bottom: 10px; overflow-wrap: anywhere; }
+.dlg-text { font-size: 14px; line-height: 1.65; color: var(--muted-text); }
+.dlg-text p + p { margin-top: 8px; }
+.dlg-text strong { color: var(--text); font-weight: 600; }
+.dlg-actions { display: flex; gap: 10px; padding: 18px 24px 24px; }
+.dlg-actions.stack { flex-direction: column; gap: 8px; }
+.dlg-actions.row { justify-content: flex-end; flex-wrap: wrap; }
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.choice:hover { border-color: var(--neon-cyan); background: rgba(0,245,212,.06); }
+.choice .c-label { font-family: var(--f-display); font-weight: 700; font-size: 14px; }
+.choice .c-desc { font-size: 12px; color: var(--muted-text); line-height: 1.45; }
+.choice.primary { border-color: rgba(0,245,212,.45); background: rgba(0,245,212,.07); }
+.choice.primary .c-label { color: var(--neon-cyan); }
+.dlg-actions.row .choice { flex-direction: row; padding: 10px 18px; }
+.choice.danger { border-color: rgba(255,45,120,.4); }
+.choice.danger .c-label { color: var(--neon-pink); }
+.choice.danger:hover { border-color: var(--neon-pink); background: rgba(255,45,120,.08); }
+
+/* ============ Acceso ============ */
+.auth-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 50000;
+  display: flex;
+  padding: calc(22px + env(safe-area-inset-top, 0px)) 22px calc(22px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(255,45,120,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(0,245,212,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 60% 10%, rgba(168,85,247,.07) 0%, transparent 60%),
+    var(--bg);
+}
+.auth-screen.auth-hidden { display: none !important; }
+.auth-card {
+  width: min(94vw, 430px);
+  margin: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 30px 26px 24px;
+  box-shadow: 0 0 60px rgba(168,85,247,.12), 0 24px 80px rgba(0,0,0,.5);
+}
+.auth-title {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(28px, 8vw, 34px);
+  line-height: 1.1;
+  padding-bottom: .06em;
+  text-align: center;
+  background: linear-gradient(135deg, #fff 30%, var(--neon-cyan) 70%, var(--neon-pink) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+.auth-subtitle { color: var(--muted-text); font-size: 13px; text-align: center; line-height: 1.6; margin-bottom: 22px; }
+.auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+.auth-tab {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted-text);
+  padding: 10px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.auth-tab:hover { color: var(--text); }
+.auth-tab.active { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,245,212,.08); }
+.auth-card[data-modo="login"] .auth-only-register { display: none; }
+.auth-card[data-modo="register"] .auth-only-login { display: none; }
+.auth-field { margin-bottom: 12px; }
+.auth-field label, .field label {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted-text);
+  margin-bottom: 6px;
+}
+.auth-field input, .field input {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 14px;
+}
+.auth-field input::placeholder, .field input::placeholder { color: var(--muted-text); }
+.auth-field input:focus-visible, .field input:focus-visible { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(0,245,212,.12); }
+.auth-hint, .hint { color: var(--muted-text); font-size: 12px; line-height: 1.5; margin-top: 6px; }
+.auth-forgot-wrap { text-align: right; margin: -4px 0 4px; }
+.auth-forgot { background: none; border: none; color: var(--muted-text); font-size: 12px; cursor: pointer; padding: 2px 0; }
+.auth-forgot:hover { color: var(--neon-cyan); text-decoration: underline; }
+.auth-actions { margin-top: 16px; }
+.auth-msg { min-height: 36px; margin-top: 14px; font-size: 12px; line-height: 1.5; color: var(--muted-text); text-align: center; overflow-wrap: anywhere; }
+.auth-msg.err { color: #ff8ab0; }
+.auth-msg.ok { color: var(--neon-cyan); }
+.auth-loading { opacity: .7; pointer-events: none; }
+
+/* ============ Modo Netflix ============ */
+.netflix-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(2rem + env(safe-area-inset-top, 0px)) 0 calc(2rem + env(safe-area-inset-bottom, 0px));
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(255,45,120,.09) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(0,245,212,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 60% 10%, rgba(168,85,247,.06) 0%, transparent 60%),
+    var(--bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.netflix-screen::-webkit-scrollbar { display: none; }
+.netflix-screen.show { opacity: 1; pointer-events: auto; }
+
+.netflix-zoom-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+  zoom: 1.4;
+}
+@supports not (zoom: 1.4) {
+  .netflix-zoom-inner { transform: scale(1.4); transform-origin: center center; }
+}
+
+.netflix-title {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1.1;
+  padding: 0 20px .06em;
+  margin-bottom: .75rem;
+  text-align: center;
+  background: linear-gradient(135deg, #fff 30%, var(--neon-cyan) 70%, var(--neon-pink) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.netflix-subtitle { color: var(--muted-text); font-size: .9rem; text-align: center; margin-bottom: 2rem; padding: 0 20px; max-width: 560px; line-height: 1.5; }
+
+.netflix-grid { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; max-width: 900px; padding: 0 20px; }
+.netflix-card { display: flex; flex-direction: column; align-items: center; position: relative; width: 130px; }
+.netflix-open {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+.netflix-open:focus-visible { outline: none; }
+
+.netflix-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  transition: all .3s cubic-bezier(.4, 0, .2, 1);
+  box-shadow: 0 8px 20px rgba(0,0,0,.6);
+  overflow: hidden;
+}
+.netflix-avatar { position: relative; }
+.netflix-cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.netflix-avatar.has-cover .netflix-initials { visibility: hidden; }
+.netflix-initials {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px rgba(0,245,212,.3));
+}
+.netflix-initials[data-n="3"] { font-size: 2.3rem; letter-spacing: 1px; }
+.netflix-initials[data-n="4"] { font-size: 1.8rem; letter-spacing: 1px; }
+.netflix-avatar.add { border-style: dashed; }
+.netflix-plus { font-size: 2.5rem; }
+
+.netflix-name {
+  color: var(--muted-text);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: all .3s;
+}
+.netflix-meta { font-family: var(--f-mono); font-size: 10px; color: var(--muted-text); margin-top: 4px; opacity: .85; }
+
+.netflix-card:hover .netflix-avatar,
+.netflix-open:focus-visible .netflix-avatar {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 25px rgba(0,245,212,.5);
+  transform: scale(1.08) translateY(-5px);
+}
+.netflix-card:hover .netflix-name,
+.netflix-open:focus-visible .netflix-name { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0,245,212,.5); }
+
+.netflix-card.manage .netflix-avatar { border-color: var(--neon-yellow); opacity: .85; box-shadow: 0 0 15px rgba(255,230,0,.2); }
+.netflix-card.manage .netflix-initials { background-image: linear-gradient(135deg, var(--neon-yellow), #ff9a3c); filter: drop-shadow(0 0 14px rgba(255,230,0,.35)); }
+.netflix-card.manage:hover .netflix-avatar,
+.netflix-card.manage .netflix-open:focus-visible .netflix-avatar { opacity: 1; border-color: var(--neon-yellow); box-shadow: 0 0 30px rgba(255,230,0,.55); transform: scale(1.05); }
+.netflix-card.manage:hover .netflix-name,
+.netflix-card.manage .netflix-open:focus-visible .netflix-name { color: var(--neon-yellow); text-shadow: 0 0 8px rgba(255,230,0,.4); }
+
+.delete-overlay, .download-overlay {
+  position: absolute;
+  top: -10px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all .2s;
+}
+.delete-overlay { right: 0; border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255,45,120,.7); }
+.delete-overlay:hover, .delete-overlay:focus-visible { background: var(--neon-pink); transform: scale(1.2); }
+.download-overlay { left: 0; border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0,245,212,.7); }
+.download-overlay:hover, .download-overlay:focus-visible { background: var(--neon-cyan); transform: scale(1.2); }
+
+.netflix-card.loading { pointer-events: none; }
+.netflix-card.loading .netflix-avatar { animation: nfPulse .9s ease-in-out infinite; border-color: var(--neon-cyan); }
+@keyframes nfPulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.netflix-card.fresh .netflix-avatar { animation: fresh 1.8s ease-out 1; }
+@keyframes fresh {
+  0%   { border-color: var(--neon-cyan); box-shadow: 0 0 0 4px rgba(0,245,212,.2), 0 0 40px rgba(0,245,212,.5); }
+  100% { border-color: var(--border); box-shadow: 0 8px 20px rgba(0,0,0,.6); }
+}
+
+.netflix-footer { margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 0 20px; }
+.user-row { display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.user-pill {
+  border: 1px solid rgba(0,245,212,.4);
+  background: rgba(0,245,212,.08);
+  color: var(--neon-cyan);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.logout-mini {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted-text);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.logout-mini:hover { border-color: var(--neon-pink); color: var(--neon-pink); }
+.btn-manage-netflix {
+  background: transparent;
+  border: 1px solid var(--muted-text);
+  color: var(--muted-text);
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .3s;
+}
+.btn-manage-netflix:hover { border-color: var(--text); color: var(--text); }
+.btn-manage-netflix.active { border-color: var(--neon-yellow); color: var(--neon-yellow); box-shadow: 0 0 15px rgba(255,230,0,.25); }
+.netflix-checkbox { display: flex; align-items: center; gap: 8px; color: var(--muted-text); font-size: 14px; cursor: pointer; transition: color .2s; }
+.netflix-checkbox:hover { color: var(--text); }
+.netflix-checkbox input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--neon-cyan); }
+
+/* mientras arranca: nada de parpadeos; si tarda, aparece un {  } que respira */
+.boot-glyph { display: none; }
+.netflix-screen.netflix-booting .netflix-zoom-inner { display: none; }
+.netflix-screen.netflix-booting .boot-glyph {
+  display: block;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 3.2rem;
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple), var(--neon-cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  animation: bootIn .5s ease .8s forwards, bootPulse 1.8s ease-in-out 1.3s infinite;
+}
+@keyframes bootIn { to { opacity: .9; } }
+@keyframes bootPulse { 0%, 100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.08); opacity: .45; } }
+
+/* ============ Diálogos extra ============ */
+dialog.wide { width: min(680px, calc(100vw - 32px)); }
+dialog.wide .dlg-body { padding: 24px; }
+.add-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.add-head .dlg-title { margin-bottom: 0; }
+dialog .drop { padding: 30px 18px 26px; }
+dialog .braces { font-size: clamp(54px, 12vw, 80px); margin-bottom: 12px; gap: 30px; }
+dialog .drop-title { font-size: 18px; }
+.field { margin-top: 16px; }
+.field input { background: var(--surface); }
+.edit-msg { min-height: 18px; margin-top: 12px; font-size: 12px; color: #ff8ab0; line-height: 1.5; }
+
+/* ============ Pantallas pequeñas ============ */
+@media (max-width: 640px) {
+  .container { padding: 24px 14px 40px; }
+  header { padding: 36px 0 30px; }
+  .subtitle { font-size: 15px; }
+  .drop { padding: 30px 16px 26px; }
+  .braces { gap: 22px; }
+  .lib-head { margin-top: 36px; }
+  .lib-note { margin-left: 0; width: 100%; }
+  .section-title { font-size: 18px; }
+  .section-header { gap: 10px; flex-wrap: wrap; }
+  .section-count { margin-left: 54px; }
+  .concept-header { padding: 14px; }
+  .concept-body { padding: 0 14px 16px; }
+  .answer-box { padding: 14px; }
+  .topic-nav { padding: 10px; }
+  .topic-btn { font-size: 12px; padding: 6px 10px; }
+  .stat-pill { padding: 6px 14px; font-size: 12px; }
+  .toolbar .ghost-btn { flex: 1 1 auto; }
+  .netflix-zoom-inner { zoom: 1; transform: none; }
+  .netflix-title { font-size: 1.9rem; }
+  .netflix-grid { gap: 1.5rem; padding: 0 14px; }
+  .auth-card { padding: 26px 18px 20px; }
+  dialog.wide .dlg-body { padding: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* ═════ CAJA DE MODOS VISUALES — copiada de index__4_.html (solo cambian: .ghost-btn→.vbox-btn y los z-index) ═════ */
+
+/* ══ MODO ASTIGMATISMO ═══════════════════════════════ */
+body.astigmatism-mode {
+  --bg:           #1e1e1e;
+  --surface:      #252525;
+  --card:         #2e2e2e;
+  --border:       #404040;
+  --neon-cyan:    #c8a66a;
+  --neon-cyan-g:  rgba(200,166,106,.08);
+  --neon-cyan-bg: rgba(200,166,106,.07);
+  --neon-pink:    #c8845a;
+  --neon-pink-g:  transparent;
+  --neon-yellow:  #c8a66a;
+  --neon-purple:  #a8946a;
+  --neon-green:   #a8b87a;
+  --neon-green-g: transparent;
+  --text:         #cdc5ae;
+  --muted:        #918978;
+  --muted2:       #615c53;
+}
+body.astigmatism-mode * { text-shadow: none !important; box-shadow: none !important; }
+body.astigmatism-mode .answer-text { letter-spacing: .04em; line-height: 1.85; -webkit-font-smoothing: antialiased; }
+body.astigmatism-mode .concept-q   { letter-spacing: .03em; }
+
+/* ══ MODO SIN NEONES ═════════════════════════════════ */
+body.focus-mode {
+  --neon-cyan:    #6a9fd8;
+  --neon-cyan-g:  transparent;
+  --neon-cyan-bg: rgba(106,159,216,.08);
+  --neon-pink:    #c07070;
+  --neon-pink-g:  transparent;
+  --neon-yellow:  #d4a838;
+  --neon-purple:  #9070c0;
+  --neon-green:   #70b870;
+  --neon-green-g: transparent;
+}
+body.focus-mode * { text-shadow: none !important; box-shadow: none !important; }
+
+/* ══ MODO LECTURA NOCTURNA ═══════════════════════════ */
+body.reading-mode {
+  --bg:           #18181d;
+  --surface:      #1f1f25;
+  --card:         #26262e;
+  --border:       #38383e;
+  --neon-cyan:    #8aad7a;
+  --neon-cyan-g:  transparent;
+  --neon-cyan-bg: rgba(138,173,122,.08);
+  --neon-pink:    #c07878;
+  --neon-pink-g:  transparent;
+  --neon-yellow:  #c8a250;
+  --neon-purple:  #9080b0;
+  --neon-green:   #8aad7a;
+  --neon-green-g: transparent;
+  --text:         #d4ccb0;
+  --muted:        #9a9280;
+  --muted2:       #6a6258;
+}
+body.reading-mode * { text-shadow: none !important; box-shadow: none !important; }
+body.reading-mode .answer-text { line-height: 1.85; letter-spacing: .025em; -webkit-font-smoothing: antialiased; }
+
+/* ══════════════════════════════════════════════════════
+   CAJA MODOS VISUALES (flotante, esquina inferior derecha)
+══════════════════════════════════════════════════════ */
+#visual-box {
+  position: fixed; bottom: 16px; right: 16px; z-index: 60000;
+  background: rgba(10,11,22,.55);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px; padding: 5px 7px;
+  display: flex; align-items: center; gap: 0;
+  backdrop-filter: blur(10px);
+  opacity: .28;
+  transition: opacity .3s, background .3s, border-color .3s;
+}
+#visual-box:hover { opacity: 1; background: rgba(19,21,41,.85); border-color: rgba(255,255,255,.12); }
+#visual-box.hidden { display: none; }
+
+.vbox-btn {
+  background: transparent; border: none; padding: 5px 7px;
+  font-size: 15px; cursor: pointer; border-radius: 6px;
+  opacity: .5; transition: opacity .2s, background .2s;
+  line-height: 1;
+}
+.vbox-btn:hover { opacity: 1; background: rgba(255,255,255,.07); }
+.vbox-btn.on { opacity: 1; }
+
+.ghost-btn-x {
+  background: transparent; border: none; padding: 4px 6px;
+  font-size: 11px; cursor: pointer; border-radius: 5px;
+  color: var(--muted2); transition: color .2s, background .2s; line-height: 1;
+}
+.ghost-btn-x:hover { color: var(--neon-pink); background: rgba(255,42,85,.1); }
+
+.vbox-sep { width: 1px; height: 14px; background: rgba(255,255,255,.08); margin: 0 2px; }
+
+/* ══════════════════════════════════════════════════════
+   MODALES (overlay)
+══════════════════════════════════════════════════════ */
+.overlay {
+  position: fixed; inset: 0; z-index: 60010;
+  background: rgba(5,5,10,.9);
+  display: none; align-items: center; justify-content: center; padding: 1rem;
+}
+.overlay.show { display: flex; }
+
+.modal {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.75rem;
+  width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto;
+}
+.modal h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; }
+.modal-alert-title { font-size: 18px; font-weight: 700; font-family: 'Syne', sans-serif; margin-bottom: .75rem; }
+.modal-alert-text  { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 1.25rem; }
+
+.modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 1.25rem; }
+
+.dont-ask-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--muted); margin-bottom: 1.25rem; cursor: pointer;
+}
+.dont-ask-row input { accent-color: var(--neon-cyan); }
+
+.btn { padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .2s; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-family: 'DM Sans', sans-serif; }
+.btn:hover { color: var(--text); border-color: var(--text); }
+.btn.primary { background: var(--neon-cyan-bg); border-color: var(--neon-cyan); color: var(--neon-cyan); }
+.btn.primary:hover { background: rgba(0,243,255,.14); }
+
+/* ══════════════════════════════════════════════════════
+   MODO EDICIÓN
+══════════════════════════════════════════════════════ */
+body.edit-mode .concept-body [contenteditable] {
+  outline: none;
+  border-radius: 4px;
+  transition: background .15s;
+  cursor: text;
+}
+body.edit-mode .concept-body [contenteditable]:hover {
+  background: rgba(255,255,255,.04);
+}
+body.edit-mode .concept-body [contenteditable]:focus {
+  background: rgba(255,255,255,.06);
+  box-shadow: inset 0 0 0 1px rgba(255,243,0,.25);
+}
+/* Highlight editable zones */
+body.edit-mode .answer-box,
+body.edit-mode .error-box,
+body.edit-mode .blockquote,
+body.edit-mode .formula,
+body.edit-mode .mini-card,
+body.edit-mode .data-table td,
+body.edit-mode .data-table th,
+body.edit-mode .concept-q {
+  cursor: text;
+}
+body.edit-mode .concept-card {
+  border-color: rgba(255,243,0,.2) !important;
+}
+body.edit-mode .concept-card:hover {
+  border-color: rgba(255,243,0,.5) !important;
+}
+/* edit mode banner */
+#edit-banner {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(255,243,0,.12);
+  border-bottom: 1px solid rgba(255,243,0,.3);
+  color: #ffe600;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 1px;
+  padding: 6px 16px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+body.edit-mode #edit-banner { display: block; }
+body.edit-mode #topbar { top: 29px; }
+
+/* ── Puente con esta página (esto no viene de index__4_.html) ───────────────────
+   · Las tres variables que usa lo copiado, con los valores de su :root. Esta página no usa
+     ninguna de ellas, así que añadirlas no cambia nada fuera de la caja y los modales.
+   · En esta página el texto secundario se llama --muted-text: en los dos modos que
+     cambian --muted (astigmatismo y lectura) se hace que lo siga, para que no se quede azul. */
+:root { --muted: #8a92b2; --muted2: #5a6282; --neon-cyan-bg: rgba(0,243,255,.08); }
+body.astigmatism-mode, body.reading-mode { --muted-text: var(--muted); }
+
+/* ═════ MODO CLARO EYE CARE ☀️ — colores y estética de index__1_.html (su bloque «MODO CLARO EYE CARE», líneas 441-510) ═════
+   Los valores de color son EXACTAMENTE los de su bloque body.light-mode. Esa página los llama --color-*;
+   esta los llama --bg, --card, --text…, así que aquí van con los nombres de esta página.
+   Debajo, cada elemento de esta página que llevaba un color pensado para fondo oscuro se pasa a esos mismos tonos tierra,
+   igual que hace su bloque con «Colores fijados a mano para el modo oscuro: los pasamos a tonos tierra». */
+body.light-mode {
+  color-scheme: light;
+  /* Papel cálido: nunca blanco puro (menos deslumbramiento y menos luz azul) */
+  --bg:      #ece6d4;
+  --surface: #f6f1e4;
+  --card:    #ebe4d0;
+
+  /* Texto grafito cálido: contraste suave pero legible (≥ 5:1) */
+  --text:       #3a352b;
+  --muted-text: #5c5547;
+  --muted:      #5c5547;
+  --muted2:     #716a59;
+
+  /* Acento verde-azulado apagado: sin cian ni azul saturado */
+  --lm-info:        #3f7f8c;
+  --lm-info-bg:     rgba(63, 127, 140, 0.12);
+  --lm-info-border: #4d8590;
+  --lm-info-text:   #2c5f6a;
+  --neon-cyan:      #2c5f6a;
+  --neon-cyan-bg:   rgba(63, 127, 140, 0.12);
+  --neon-purple:    #3f7f8c;      /* su paleta no tiene violeta: el acento es este verde-azulado */
+
+  /* Estados en tonos tierra, no verde/rojo/amarillo puros */
+  --lm-ok-bg:     rgba(77, 122, 58, 0.14);
+  --lm-ok-border: #5c8a4c;
+  --lm-ok-text:   #3d6b34;
+  --lm-bad-bg:     rgba(168, 66, 52, 0.10);
+  --lm-bad-border: #b4584b;
+  --lm-bad-text:   #9a3b30;
+  --neon-pink:     #9a3b30;
+  --lm-warn-bg:     rgba(176, 122, 20, 0.14);
+  --lm-warn-border: #a8761c;
+  --lm-warn-text:   #80570e;
+  --neon-yellow:    #80570e;
+
+  --border:       #c4b99c;
+  --lm-line-soft: #d3c9ae;
+
+  /* Sus tintes rgba() calculados sobre su papel claro: así el texto de color encima conserva ≥ 4,5:1 */
+  --lm-info-tint: #e0e3d9;
+  --lm-ok-tint:   #dee0cc;
+  --lm-bad-tint:  #eee0d2;
+  --lm-warn-tint: #ece0c7;
+}
+html:has(body.light-mode) { background: #ece6d4; }
+body.light-mode * { text-shadow: none !important; box-shadow: none !important; }
+body.light-mode::before { display: none; }  /* papel plano: sin las manchas de color del fondo oscuro */
+/* Sombra mínima solo para separar tarjetas del papel */
+body.light-mode .concept-card, body.light-mode .modal, body.light-mode dialog, body.light-mode .auth-card { box-shadow: 0 1px 3px rgba(80, 66, 30, 0.14) !important; }
+body.light-mode .modal { border: 1px solid var(--border); }
+body.light-mode .overlay, body.light-mode dialog::backdrop { background: rgba(233, 226, 205, 0.9); }
+body.light-mode .modal { background: var(--surface); }  /* como su .alert-box: papel claro */
+
+/* Texto de lectura: más espaciado entre letras y sin negritas de más */
+body.light-mode .concept-q, body.light-mode .answer-text, body.light-mode .mini-card, body.light-mode .blockquote, body.light-mode .error-box { line-height: 1.75; letter-spacing: 0.04em; font-weight: 400; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* Títulos: color de texto-info, como su .netflix-title (sin degradado blanco, que sobre papel no se ve) */
+body.light-mode h1, body.light-mode .auth-title, body.light-mode .netflix-title { background: none; -webkit-text-fill-color: var(--lm-info-text); color: var(--lm-info-text); }
+
+/* Botones y píldoras: papel + texto verde-azulado + borde, como su .btn.primary y su .tab.active */
+body.light-mode .glow-btn { background: var(--bg); color: var(--lm-info-text); border: 1px solid var(--lm-info-border); }
+body.light-mode .glow-btn:hover { background: var(--lm-info-bg); opacity: 1; }
+body.light-mode .header-badge { background: var(--lm-info-bg); color: var(--lm-info-text); border: 1px solid var(--lm-info-border); }
+body.light-mode .ghost-btn:hover, body.light-mode .topic-btn:hover, body.light-mode .topic-btn.active, body.light-mode .auth-tab.active, body.light-mode .choice:hover { background: var(--lm-info-bg); }
+body.light-mode .choice.primary { background: var(--lm-info-bg); border-color: var(--lm-info-border); }
+body.light-mode .choice.danger { border-color: var(--lm-bad-border); }
+body.light-mode .choice.danger:hover { background: var(--lm-bad-bg); }
+body.light-mode .user-pill { border-color: var(--lm-info-border); background: var(--lm-info-bg); }
+body.light-mode .btn.primary { background: var(--bg); }
+body.light-mode .btn.primary:hover { background: var(--lm-info-bg); }
+body.light-mode .btn:hover { background: var(--surface); }
+
+/* Respuestas y comparativas: teñidas como su .explicacion-box */
+body.light-mode .answer-box { background: var(--lm-info-tint); border-color: rgba(63, 127, 140, 0.35); }
+body.light-mode .blockquote { background: var(--lm-info-tint); border-left-color: var(--lm-info-border); color: var(--muted-text); }
+body.light-mode .blockquote strong { color: var(--text); }
+body.light-mode .error-box { background: var(--lm-bad-tint); border-color: rgba(168, 66, 52, 0.35); color: var(--lm-bad-text); }
+body.light-mode .error-box strong { color: var(--lm-bad-text); }
+body.light-mode .formula strong { color: var(--text); }
+body.light-mode .data-table th { background: var(--lm-info-tint); }
+body.light-mode .data-table td { border-bottom-color: var(--lm-line-soft); }
+body.light-mode .data-table tr:hover td { background: rgba(60, 50, 30, 0.04); }
+body.light-mode .rich code { background: var(--surface); }
+body.light-mode .rich mark { background: var(--lm-warn-tint); }
+
+/* Etiquetas: los mismos tonos tierra que sus pestañas de errores (.err-tab), favoritas (.fav-tab) y ocultas (.hide-tab) */
+body.light-mode .tag-art, body.light-mode .tag-fuente, body.light-mode .section-count, body.light-mode .lib-count { background: rgba(168, 66, 52, 0.06); border-color: rgba(168, 66, 52, 0.35); color: var(--lm-bad-text); }
+body.light-mode .tag-def, body.light-mode .tag-tabla { background: var(--lm-info-bg); border-color: rgba(63, 127, 140, 0.35); color: var(--lm-info-text); }
+body.light-mode .tag-req, body.light-mode .tag-key { background: rgba(176, 122, 20, 0.07); border-color: rgba(128, 87, 14, 0.35); color: var(--lm-warn-text); }
+body.light-mode .tag-practica, body.light-mode .tag-tip { background: rgba(77, 122, 58, 0.07); border-color: rgba(77, 122, 58, 0.35); color: var(--lm-ok-text); }
+
+/* Informe de carga y mensajes */
+body.light-mode .res.ok { background: var(--lm-ok-tint); border-color: var(--lm-ok-border); }
+body.light-mode .res.ok .res-icon, body.light-mode .res.ok .res-title, body.light-mode .auth-msg.ok { color: var(--lm-ok-text); }
+body.light-mode .res.warn { background: var(--lm-warn-tint); border-color: var(--lm-warn-border); }
+body.light-mode .res.warn .res-icon, body.light-mode .res.warn .res-title { color: var(--lm-warn-text); }
+body.light-mode .res.err { background: var(--lm-bad-tint); border-color: var(--lm-bad-border); }
+body.light-mode .res.err .res-icon, body.light-mode .res.err .res-title, body.light-mode .auth-msg.err, body.light-mode .edit-msg { color: var(--lm-bad-text); }
+body.light-mode .drop.over { background: var(--lm-info-bg); border-color: var(--lm-info-border); }
+
+/* Acceso y modo Netflix: su mismo fondo (papel con un toque verde-azulado arriba) */
+body.light-mode .auth-screen, body.light-mode .netflix-screen { background: radial-gradient(circle at top, rgba(63, 127, 140, 0.10), transparent 34%), var(--bg); }
+body.light-mode .netflix-initials { filter: none; }
+body.light-mode .netflix-meta { opacity: 1; }
+body.light-mode .netflix-card.manage .netflix-avatar { opacity: 1; }
+body.light-mode .netflix-card.manage .netflix-initials { background: none; -webkit-text-fill-color: var(--lm-warn-text); filter: none; }
+
+/* Modo edición y la propia cajita */
+body.light-mode #edit-banner { background: var(--lm-warn-tint); border-bottom-color: var(--lm-warn-border); color: var(--lm-warn-text); }
+body.light-mode.edit-mode .concept-card { border-color: rgba(176, 122, 20, 0.2) !important; }
+body.light-mode.edit-mode .concept-card:hover { border-color: rgba(176, 122, 20, 0.5) !important; }
+body.light-mode.edit-mode .concept-body [contenteditable]:hover { background: rgba(60, 50, 30, 0.04); }
+body.light-mode.edit-mode .concept-body [contenteditable]:focus { background: rgba(60, 50, 30, 0.06); outline: 1px solid var(--lm-warn-border); }
+body.light-mode #visual-box { background: rgba(246, 241, 228, 0.75); border-color: rgba(80, 66, 30, 0.14); }
+body.light-mode #visual-box:hover { background: rgba(246, 241, 228, 0.95); border-color: rgba(80, 66, 30, 0.3); }
+body.light-mode .vbox-btn:hover { background: rgba(60, 50, 30, 0.07); }
+body.light-mode .vbox-sep { background: rgba(60, 50, 30, 0.18); }
+body.light-mode .ghost-btn-x:hover { background: var(--lm-bad-bg); }
 </style>
 </head>
 <body>
-<div class="screen" id="boot"><div class="n-sub" id="bt">Cargando…</div></div>
-<div class="screen" id="auth" hidden>
-  <div class="header-badge">⚡ Modo Repaso</div>
-  <div class="n-title">Accede a tus apuntes</div>
-  <div class="n-sub">Entra con tu usuario y contraseña de siempre.</div>
-  <div class="auth-card">
-    <label for="u">Usuario</label>
-    <input id="u" type="text" autocomplete="username" autocapitalize="none" spellcheck="false">
-    <label for="p">Contraseña</label>
-    <input id="p" type="password" autocomplete="current-password">
-    <button class="glow-btn" id="go" type="button">Entrar</button>
-    <div id="amsg" role="alert"></div>
-  </div>
+
+<!-- ============ ACCESO ============ -->
+<div id="auth-screen" class="auth-screen auth-hidden">
+  <form class="auth-card" id="auth-card" data-modo="login" novalidate>
+    <h1 class="auth-title">Mis Apuntes</h1>
+    <p class="auth-subtitle">Entra con tu usuario y contraseña (es la misma cuenta de Testzema). Cada cuenta guarda sus asignaturas por separado.</p>
+    <div class="auth-tabs" role="tablist">
+      <button type="button" class="auth-tab active" id="auth-tab-login" role="tab" aria-selected="true">Entrar</button>
+      <button type="button" class="auth-tab" id="auth-tab-register" role="tab" aria-selected="false">Crear cuenta</button>
+    </div>
+    <div class="auth-field">
+      <label for="auth-user">Usuario</label>
+      <input id="auth-user" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Ej: usuario o usuario@email.com">
+    </div>
+    <div class="auth-field">
+      <label for="auth-pass">Contraseña</label>
+      <input id="auth-pass" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres">
+    </div>
+    <div class="auth-forgot-wrap auth-only-login">
+      <button type="button" class="auth-forgot" id="auth-forgot">He olvidado la contraseña</button>
+    </div>
+    <div class="auth-field auth-only-register">
+      <label for="auth-recovery-email">Email de recuperación (opcional)</label>
+      <input id="auth-recovery-email" type="email" autocomplete="email" placeholder="tu@email.com">
+      <div class="auth-hint">Si lo indicas, podrás recuperar el acceso si olvidas la contraseña. Si lo dejas en blanco, no habrá forma de recuperarla.</div>
+    </div>
+    <div class="auth-actions">
+      <button type="submit" class="glow-btn block" id="auth-submit-btn">Entrar</button>
+    </div>
+    <div id="auth-msg" class="auth-msg" role="status" aria-live="polite">Inicializando Firebase…</div>
+  </form>
 </div>
 
-<div class="screen" id="home" hidden>
-  <div class="n-title">¿Qué vas a estudiar hoy?</div>
-  <div class="n-sub" id="hsub"></div>
-  <div class="n-grid" id="hgrid"></div>
-  <div id="hstatus" aria-live="polite"></div>
-  <div class="n-foot">
-    <span class="pill" id="who"></span>
-    <button class="topic-btn" id="mng" type="button">⚙️ Administrar</button>
-    <button class="topic-btn" id="out" type="button">Salir</button>
-  </div>
-</div>
-
-<div class="container" id="app" hidden>
-  <div class="topbar"><button class="topic-btn" id="back" type="button">👤 Cambiar de asignatura</button></div>
-  <header>
-    <div class="header-badge">⚡ Modo Repaso</div>
-    <h1 id="h1"></h1>
-    <p class="subtitle" id="sub"></p>
-  </header>
-
-  <div class="drop" id="drop">
-    <div class="drop-t" id="dt"></div>
-    <div class="drop-s">Puedes subir varios a la vez. Si subes otra parte de una asignatura que ya tienes, se une a ella sin duplicar temas.</div>
-    <button class="glow-btn" id="pick" type="button"></button>
-    <input id="file" type="file" accept=".json,application/json" multiple hidden>
-  </div>
-
-  <div id="status" aria-live="polite"></div>
-  <div class="topic-nav" id="subs"></div>
-  <div class="topic-nav" id="nav"></div>
-  <main id="main"></main>
-
-  <div id="foot" hidden>
-    <div class="divider"></div>
-    <div style="text-align:center;margin:20px 0 60px">
-      <button class="glow-btn" type="button" onclick="scrollTo({top:0,behavior:'smooth'})">↑ Volver al inicio</button>
+<!-- ============ MODO NETFLIX ============ -->
+<div id="netflix-screen" class="netflix-screen show netflix-booting">
+  <div class="boot-glyph" aria-hidden="true">{ }</div>
+  <div class="netflix-zoom-inner">
+    <h1 class="netflix-title">¿Qué vas a estudiar hoy?</h1>
+    <p class="netflix-subtitle" id="netflix-subtitle"></p>
+    <div class="netflix-grid" id="netflix-grid" role="list"></div>
+    <div class="netflix-footer">
+      <div class="user-row">
+        <span id="auth-user-pill" class="user-pill" title="Usuario activo">Usuario</span>
+        <button type="button" class="logout-mini" id="btn-logout">Salir</button>
+      </div>
+      <button type="button" class="btn-manage-netflix" id="btn-manage">⚙️ Administrar asignaturas</button>
+      <label class="netflix-checkbox" id="skip-label">
+        <input type="checkbox" id="skip-today">
+        No volver a preguntar hoy
+      </label>
     </div>
   </div>
 </div>
 
-<script>window.onerror=function(m){var t=document.getElementById('bt'),b=document.getElementById('boot');if(t&&b&&!b.hidden)t.textContent='Error al arrancar: '+m};</script>
+<!-- ============ ASIGNATURA ============ -->
+<main id="view-subject" class="container" hidden>
+  <button type="button" class="ghost-btn back" id="btn-back"><span aria-hidden="true">←</span> Cambiar asignatura</button>
+
+  <header>
+    <div class="header-badge">⚡ Modo Repaso</div>
+    <h1 id="s-title"></h1>
+    <p class="subtitle" id="s-sub"></p>
+    <div class="stats-bar" id="s-stats"></div>
+  </header>
+
+  <div class="toolbar">
+    <label class="search">
+      <span class="sr-only">Buscar en esta asignatura</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="q" placeholder="Buscar en esta asignatura…" autocomplete="off" spellcheck="false">
+    </label>
+    <button type="button" class="ghost-btn" id="btn-open-all">Abrir todo</button>
+    <button type="button" class="ghost-btn" id="btn-close-all">Cerrar todo</button>
+  </div>
+  <div class="result-count" id="result-count" aria-live="polite"></div>
+
+  <nav class="topic-nav" id="nav" aria-label="Temas">
+    <div class="nav-pills" id="nav-pills"></div>
+    <button type="button" class="ghost-btn small nav-more" id="nav-more" hidden></button>
+  </nav>
+
+  <div id="sections"></div>
+  <p class="empty" id="no-results" hidden></p>
+</main>
+
+<!-- ============ DIÁLOGOS ============ -->
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <form method="dialog">
+    <div class="dlg-body">
+      <h2 class="dlg-title" id="dlg-title"></h2>
+      <div class="dlg-text" id="dlg-text"></div>
+    </div>
+    <div class="dlg-actions" id="dlg-actions"></div>
+  </form>
+</dialog>
+
+<dialog id="add-dlg" class="wide" aria-labelledby="add-title">
+  <div class="dlg-body">
+    <div class="add-head">
+      <h2 class="dlg-title" id="add-title">Nueva asignatura</h2>
+      <button type="button" class="ghost-btn small" id="add-close">Cerrar</button>
+    </div>
+
+    <section class="drop" id="drop" aria-label="Subir archivos JSON">
+      <div class="braces" aria-hidden="true">
+        <span class="b l">{</span>
+        <span class="ext"><span class="rest">.json</span><span class="go">suelta</span></span>
+        <span class="b r">}</span>
+      </div>
+      <p class="drop-title">Arrastra aquí tus archivos .json</p>
+      <p class="drop-sub">Uno por asignatura. Puedes subir varios a la vez; si una asignatura llega en partes, se combinan.</p>
+      <div class="drop-actions">
+        <button type="button" class="glow-btn" id="btn-pick">Elegir archivos</button>
+        <button type="button" class="ghost-btn" id="btn-paste" aria-expanded="false" aria-controls="paste">Pegar JSON</button>
+      </div>
+      <input type="file" id="file" accept=".json,.txt,application/json,text/plain" multiple hidden>
+    </section>
+
+    <section class="paste" id="paste" hidden>
+      <label class="sr-only" for="paste-text">JSON de la asignatura</label>
+      <textarea id="paste-text" spellcheck="false" placeholder="Pega aquí el JSON completo que te dio la IA…"></textarea>
+      <div class="paste-actions">
+        <button type="button" class="ghost-btn" id="paste-cancel">Cancelar</button>
+        <button type="button" class="glow-btn" id="paste-load">Cargar JSON</button>
+      </div>
+    </section>
+
+    <section class="report" id="report" aria-live="polite" hidden></section>
+  </div>
+</dialog>
+
+<dialog id="edit-dlg" aria-labelledby="edit-title">
+  <form id="edit-form" novalidate>
+    <div class="dlg-body">
+      <h2 class="dlg-title" id="edit-title">Editar asignatura</h2>
+      <div class="field">
+        <label for="edit-name">Nombre</label>
+        <input id="edit-name" type="text" maxlength="80" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="edit-image">Portada (enlace a una imagen, opcional)</label>
+        <input id="edit-image" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://…">
+        <div class="hint">Déjala en blanco para usar las iniciales.</div>
+      </div>
+      <div class="edit-msg" id="edit-msg" role="status" aria-live="polite"></div>
+    </div>
+    <div class="dlg-actions row">
+      <button type="button" class="choice" id="edit-cancel"><span class="c-label">Cancelar</span></button>
+      <button type="submit" class="choice primary" id="edit-save"><span class="c-label">Guardar</span></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ══ BANNER MODO EDICIÓN ═══════════════════════════════ -->
+<div id="edit-banner">✏️ MODO EDICIÓN ACTIVO — haz clic en cualquier texto para editarlo · Los cambios se guardan automáticamente</div>
+
+<!-- ══ MODALES DE MODOS VISUALES ════════════════════════════ -->
+<div class="overlay" id="modal-astigmatismo">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-alert-title" style="color:var(--neon-cyan);">🧐 Modo Astigmatismo</div>
+    <div class="modal-alert-text">Cambia fondos y acentos a tonos cálidos (sepia y ámbar), elimina todos los brillos y amplía el espaciado entre letras. Reduce el efecto de doble contorno y la fatiga visual.</div>
+    <label class="dont-ask-row"><input type="checkbox" id="astig-no-ask"> No volver a preguntar</label>
+    <div class="modal-btns">
+      <button class="btn" onclick="document.getElementById('modal-astigmatismo').classList.remove('show')">Cancelar</button>
+      <button class="btn primary" onclick="ejecutarAstigmatismo()">Activar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-foco">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-alert-title" style="color:var(--neon-cyan);">💡 Sin Neones</div>
+    <div class="modal-alert-text">Mantiene la paleta oscura original pero apaga todos los resplandores, brillos y efectos de texto. Misma interfaz, sin distracción visual periférica.</div>
+    <label class="dont-ask-row"><input type="checkbox" id="foco-no-ask"> No volver a preguntar</label>
+    <div class="modal-btns">
+      <button class="btn" onclick="document.getElementById('modal-foco').classList.remove('show')">Cancelar</button>
+      <button class="btn primary" onclick="ejecutarFoco()">Activar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-lectura">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-alert-title" style="color:var(--neon-cyan);">📖 Lectura Nocturna</div>
+    <div class="modal-alert-text">Fondo gris oscuro suave, texto crema cálido. Elimina el halation del texto blanco sobre negro y el componente azul que suprime la melatonina en sesiones nocturnas.</div>
+    <label class="dont-ask-row"><input type="checkbox" id="lectura-no-ask"> No volver a preguntar</label>
+    <div class="modal-btns">
+      <button class="btn" onclick="document.getElementById('modal-lectura').classList.remove('show')">Cancelar</button>
+      <button class="btn primary" onclick="ejecutarLectura()">Activar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-claro">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-alert-title" style="color:var(--neon-cyan);">☀️ Modo Claro Eye Care</div>
+    <div class="modal-alert-text" style="text-align:left; line-height:1.55;">
+      <div>• Fondo de papel cálido en vez de blanco puro.</div>
+      <div>• Texto grafito cálido con contraste suave pero legible.</div>
+      <div>• Acentos verde-azulados apagados, sin cian ni neones.</div>
+      <div>• Sin brillos ni sombras de texto, y más espaciado entre letras.</div>
+      <div>• Va mejor con la habitación iluminada; de noche usa los modos oscuros.</div>
+    </div>
+    <label class="dont-ask-row"><input type="checkbox" id="light-dont-ask"> No volver a preguntar esto</label>
+    <div class="modal-btns">
+      <button class="btn" onclick="document.getElementById('modal-claro').classList.remove('show')">Cancelar</button>
+      <button class="btn primary" onclick="ejecutarClaro()">Activar Modo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CAJA MODOS VISUALES (flotante) ═══════════════════════ -->
+<div id="visual-box">
+  <button class="vbox-btn" id="vbtn-astig"    title="Modo Astigmatismo — tonos cálidos, sin brillos" onclick="intentar('astigmatismo')">🧐</button>
+  <button class="vbox-btn" id="vbtn-foco"     title="Sin Neones — interfaz limpia sin resplandores"  onclick="intentar('foco')">💡</button>
+  <button class="vbox-btn" id="vbtn-lectura"  title="Lectura Nocturna — texto crema, fondo suave"    onclick="intentar('lectura')">📖</button>
+  <button class="vbox-btn" id="vbtn-claro"    title="Modo Claro Eye Care (Fondo papel cálido, sin brillos)" onclick="intentar('claro')">☀️</button>
+  <div class="vbox-sep"></div>
+  <button class="vbox-btn" id="vbtn-editor"   title="Modo edición — edita el texto de los apuntes"  onclick="toggleEditor()">✏️</button>
+  <div class="vbox-sep"></div>
+  <button class="ghost-btn-x" title="Ocultar panel visual" onclick="document.getElementById('visual-box').classList.add('hidden')">✕</button>
+</div>
+
+<!-- Puente (no viene de index__4_.html): el modo edición copiado lee aquí el nombre de la asignatura abierta -->
+<div id="topbar-title" hidden></div>
+
 <script>
-const $=s=>document.querySelector(s);
-const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
-const OK=new Set(['STRONG','EM','UL','OL','LI','BR','P']);
-function clean(v){const t=document.createElement('template');t.innerHTML=String(v??'');(function w(n){[...n.childNodes].forEach(c=>{if(c.nodeType===1){w(c);if(OK.has(c.tagName))[...c.attributes].forEach(a=>c.removeAttribute(a.name));else c.replaceWith(...c.childNodes)}else if(c.nodeType!==3)c.remove()})})(t.content);return t.innerHTML}
-const H=(t,c,x)=>{const e=h(t,c);e.innerHTML=clean(x);return e};
-const lb=v=>v&&v!=='null'?String(v):null;
-const TAGS=['art','def','key','req','tabla','practica','fuente','tip'];
+/* ═════ Copiado tal cual de index__4_.html: modos visuales + modo edición ═════ */
 
-const B={
-  answer:b=>{const e=h('div','answer-box'),l=lb(b.label);if(l)e.append(h('div','answer-label',l));e.append(H('div','answer-text',b.html));return e},
-  blockquote:b=>H('div','blockquote',b.html),
-  error:b=>H('div','error-box',b.html),
-  formula:b=>{const e=h('div','formula'),l=lb(b.titulo);if(l)e.append(h('div','formula-title',l));e.append(H('div',null,b.html));return e},
-  grid2:b=>{const g=h('div','grid-2');g.style.setProperty('--n',b.columnas.length);b.columnas.forEach(c=>{const m=h('div','mini-card');m.append(h('div','mini-title',c&&c.titulo),H('div',null,c&&c.html));g.append(m)});return g},
-  tabla:b=>{const w=h('div','tbl-wrap'),t=h('table','data-table'),r=t.insertRow();b.cabeceras.forEach(x=>r.append(H('th',null,x)));b.filas.forEach(f=>{const r=t.insertRow();[].concat(f).forEach(x=>r.append(H('td',null,x)))});w.append(t);return w}
-};
-const ok=b=>b&&Object.hasOwn(B,b.tipo)&&(b.tipo==='grid2'?Array.isArray(b.columnas)&&b.columnas.length>0:b.tipo==='tabla'?Array.isArray(b.cabeceras)&&Array.isArray(b.filas):String(b.html??'').trim()!=='');
+/* ═══════════════════════════════════════════════════════════
+   MODOS VISUALES
+═══════════════════════════════════════════════════════════ */
+const MODES = ['astigmatism-mode','focus-mode','reading-mode'];
+const BTN_IDS = { 'astigmatismo':'vbtn-astig', 'foco':'vbtn-foco', 'lectura':'vbtn-lectura' };
+const CLASS_MAP = { 'astigmatismo':'astigmatism-mode', 'foco':'focus-mode', 'lectura':'reading-mode' };
+const LS_KEY  = { 'astigmatismo':'hideAstigWarn', 'foco':'hideFocoWarn', 'lectura':'hideReadingWarn' };
 
-/* ---------- estado y persistencia ---------- */
-let KEY='',st={subs:[],cur:0,topic:'all'};
-function loadState(uid){KEY='apuntes-json-v1:'+uid;st={subs:[],cur:0,topic:'all'};try{const r=JSON.parse(localStorage.getItem(KEY)||'null');if(r&&Array.isArray(r.subs)){st.subs=r.subs;st.cur=Math.min(r.cur|0,Math.max(0,r.subs.length-1))}}catch(_){}}
-function save(){if(!KEY)return;try{localStorage.setItem(KEY,JSON.stringify({subs:st.subs,cur:st.cur}))}catch(_){note(['No se pudo guardar en este navegador. Tendrás que volver a subir los .json la próxima vez.'],true)}}
-function note(lines,bad){const b=h('div',bad?'error-box':'answer-box');b.setAttribute('role',bad?'alert':'status');lines.forEach(l=>b.append(h('div',null,l)));$(view==='home'?'#hstatus':'#status').append(b)}
-
-/* ---------- lectura y validación ---------- */
-function parse(t){try{return JSON.parse(t)}catch(_){try{return JSON.parse(t.replace(/```(?:json)?/gi,'').split('\n').filter(l=>!/^\s*\/\//.test(l)).join('\n'))}catch(e){throw Error('no es un JSON válido ('+e.message+')')}}}
-function norm(s){
-  if(!s||typeof s.asignatura!=='string'||!s.asignatura.trim())throw Error('falta el campo "asignatura"');
-  if(!Array.isArray(s.temas)||!s.temas.length)throw Error('falta la lista "temas"');
-  let bad=0;
-  const temas=s.temas.map((t,i)=>{
-    if(!t||typeof t.titulo!=='string'||!Array.isArray(t.conceptos))throw Error('el tema '+(i+1)+' necesita "titulo" y "conceptos"');
-    return{id:String(t.id??'t'+i),titulo:t.titulo,navLabel:String(t.navLabel||t.titulo),icono:String(t.icono||'📖'),
-      iconBg:/^rgba?\([\d\s.,%]+\)$/.test(t.iconBg)?t.iconBg:'rgba(0,245,212,.12)',
-      conceptos:t.conceptos.filter(c=>c&&typeof c.pregunta==='string').map(c=>({tag:String(c.tag||''),tagColor:TAGS.includes(c.tagColor)?c.tagColor:'def',pregunta:c.pregunta,
-        bloques:(Array.isArray(c.bloques)?c.bloques:[]).filter(b=>{const k=ok(b);if(!k)bad++;return k})}))};
-  });
-  return{s:{asignatura:s.asignatura.trim(),subtitulo:String(s.subtitulo||''),temas},bad};
+function intentar(mode) {
+  const cls = CLASS_MAP[mode];
+  // Si ya está activo → apagar directamente sin modal
+  if (document.body.classList.contains(cls)) { applyMode(mode); return; }
+  // Si tiene "no preguntar" → activar directo
+  if (localStorage.getItem(LS_KEY[mode]) === 'true') { applyMode(mode); return; }
+  document.getElementById('modal-' + mode).classList.add('show');
 }
-function merge({s,bad}){
-  const extra=bad?' · '+bad+' bloques ignorados por formato incorrecto':'';
-  const i=st.subs.findIndex(x=>x.asignatura.toLowerCase()===s.asignatura.toLowerCase());
-  if(i<0){st.subs.push(s);st.cur=st.subs.length-1;return s.asignatura+': '+s.temas.length+' temas cargados'+extra}
-  const T=st.subs[i].temas;let n=0;
-  s.temas.forEach(t=>{const j=T.findIndex(x=>x.id===t.id);if(j<0){T.push(t);n++}else T[j]=t});
-  if(s.subtitulo)st.subs[i].subtitulo=s.subtitulo;
-  st.cur=i;
-  return s.asignatura+' actualizada: '+n+' temas nuevos, '+(s.temas.length-n)+' reemplazados'+extra;
+
+function ejecutarAstigmatismo() {
+  if (document.getElementById('astig-no-ask').checked) localStorage.setItem(LS_KEY['astigmatismo'],'true');
+  document.getElementById('modal-astigmatismo').classList.remove('show');
+  applyMode('astigmatismo');
 }
-async function load(files){
-  if(!files.length||(view!=='home'&&view!=='app'))return;
-  $('#status').replaceChildren();$('#hstatus').replaceChildren();
-  const oks=[],errs=[];
-  for(const f of files){
-    try{
-      const d=parse(await f.text());
-      (Array.isArray(d)?d:Array.isArray(d&&d.asignaturas)?d.asignaturas:[d]).forEach(s=>oks.push(merge(norm(s))));
-    }catch(e){errs.push(f.name+' — '+e.message)}
+function ejecutarFoco() {
+  if (document.getElementById('foco-no-ask').checked) localStorage.setItem(LS_KEY['foco'],'true');
+  document.getElementById('modal-foco').classList.remove('show');
+  applyMode('foco');
+}
+function ejecutarLectura() {
+  if (document.getElementById('lectura-no-ask').checked) localStorage.setItem(LS_KEY['lectura'],'true');
+  document.getElementById('modal-lectura').classList.remove('show');
+  applyMode('lectura');
+}
+
+function applyMode(mode) {
+  const cls = CLASS_MAP[mode];
+  const isOn = document.body.classList.contains(cls);
+  // Apagar todos
+  MODES.forEach(m => document.body.classList.remove(m));
+  Object.values(BTN_IDS).forEach(id => document.getElementById(id).classList.remove('on'));
+  // Si no estaba activo → encender
+  if (!isOn) {
+    document.body.classList.add(cls);
+    document.getElementById(BTN_IDS[mode]).classList.add('on');
+    localStorage.setItem('visual_mode', mode);
+  } else {
+    localStorage.removeItem('visual_mode');
   }
-  st.topic='all';save();view==='home'?renderHome():render();
-  if(oks.length)note(oks,false);
-  if(errs.length)note([...errs,'Comprueba que el JSON esté completo (sin cortar) y que siga la estructura del prompt.'],true);
 }
 
-/* ---------- pintado ---------- */
-function card(c){
-  const e=h('div','concept-card'),hd=h('div','concept-header'),q=h('div','concept-q'),b=h('div','concept-body');
-  if(c.tag)q.append(h('span','tag tag-'+c.tagColor,c.tag));
-  q.append(c.pregunta);
-  hd.append(q,h('div','toggle-icon','+'));
-  hd.tabIndex=0;hd.setAttribute('role','button');hd.setAttribute('aria-expanded','false');
-  e.append(hd,b);
-  e.set=o=>{if(o&&!b.hasChildNodes())c.bloques.forEach(x=>b.append(B[x.tipo](x)));e.classList.toggle('open',o);hd.setAttribute('aria-expanded',o)};
-  const tg=()=>e.set(!e.classList.contains('open'));
-  hd.onclick=tg;
-  hd.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tg()}};
-  return e;
+/* ── Modo Claro Eye Care ☀️ (de index__1_.html): se suma a los tres modos de arriba, con el mismo mecanismo ── */
+MODES.push('light-mode');
+BTN_IDS['claro']  = 'vbtn-claro';
+CLASS_MAP['claro'] = 'light-mode';
+LS_KEY['claro']   = 'hideLightWarn';
+function ejecutarClaro() {
+  if (document.getElementById('light-dont-ask').checked) localStorage.setItem(LS_KEY['claro'],'true');
+  document.getElementById('modal-claro').classList.remove('show');
+  applyMode('claro');
 }
-const dz=$('#drop');
-function render(){
-  const S=st.subs[st.cur];
-  $('#h1').textContent=S?S.asignatura:'Visor de apuntes';
-  $('#sub').textContent=S?S.subtitulo:'Sube el .json de cada asignatura y estudia con tus apuntes interactivos';
-  dz.className='drop'+(S?' compact':'');
-  $('#dt').textContent=S?'Arrastra más .json aquí o':'Arrastra aquí los .json de tus asignaturas';
-  $('#pick').textContent=S?'＋ Añadir .json':'Elegir archivos';
-  $('#foot').hidden=!S;
-  const sb=$('#subs'),nav=$('#nav'),main=$('#main');
-  sb.replaceChildren();nav.replaceChildren();main.replaceChildren();
-  st.subs.forEach((s,i)=>{
-    const on=i===st.cur,w=h('span','sub-tab'+(on?' active':'')),b=h('button','topic-btn'+(on?' active':''),s.asignatura),x=h('button','x','×');
-    b.type=x.type='button';
-    b.onclick=()=>{st.cur=i;st.topic='all';save();render()};
-    x.setAttribute('aria-label','Quitar '+s.asignatura);
-    x.onclick=()=>{st.subs.splice(i,1);if(i<st.cur)st.cur--;st.cur=Math.max(0,Math.min(st.cur,st.subs.length-1));st.topic='all';save();render()};
-    w.append(b,x);sb.append(w);
+
+/* (en index__4_.html estas líneas están dentro de init(); aquí van al cargar) */
+  // Restaurar modo visual
+  const savedMode = localStorage.getItem('visual_mode');
+  if (savedMode && CLASS_MAP[savedMode]) {
+    document.body.classList.add(CLASS_MAP[savedMode]);
+    document.getElementById(BTN_IDS[savedMode]).classList.add('on');
+  }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO EDICIÓN
+═══════════════════════════════════════════════════════════ */
+let editMode = false;
+
+function toggleEditor() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  document.getElementById('vbtn-editor').classList.toggle('on', editMode);
+
+  if (editMode) {
+    activarEditables();
+  } else {
+    desactivarEditables();
+    // Save changes back to localStorage
+    guardarEdicion();
+  }
+}
+
+function activarEditables() {
+  // Make text content of blocks editable
+  // answer-text, error-box inner, blockquote inner, formula inner, mini-card inner, table cells, concept-q
+  const sel = [
+    '.answer-text',
+    '.error-box',
+    '.blockquote',
+    '.formula > div',
+    '.mini-card',
+    '.data-table td',
+    '.data-table th',
+    '.concept-q'
+  ].join(', ');
+
+  document.querySelectorAll(sel).forEach(el => {
+    el.setAttribute('contenteditable', 'true');
+    el.setAttribute('spellcheck', 'false');
+    // Prevent card toggle when clicking to edit
+    el.addEventListener('click', stopProp);
   });
-  if(!S)return;
-  [['all','Todos'],...S.temas.map((t,i)=>[i,t.navLabel])].forEach(([k,l])=>{
-    const b=h('button','topic-btn'+(st.topic===k?' active':''),l);b.type='button';b.title=l;
-    b.onclick=()=>{st.topic=k;render()};nav.append(b);
-  });
-  const a=h('button','topic-btn','↕ Abrir todo');a.type='button';
-  a.onclick=()=>{const cs=[...document.querySelectorAll('.concept-card')],o=cs.some(c=>!c.classList.contains('open'));cs.forEach(c=>c.set(o));a.textContent=o?'↕ Cerrar todo':'↕ Abrir todo'};
-  nav.append(a);
-  S.temas.forEach((t,ti)=>{
-    if(st.topic!=='all'&&st.topic!==ti)return;
-    const sec=h('div','topic-section visible'),hd=h('div','section-header'),ic=h('div','section-icon',t.icono),n=t.conceptos.length;
-    ic.style.background=t.iconBg;
-    hd.append(ic,h('div','section-title',t.titulo),h('div','section-count',n+(n===1?' concepto':' conceptos')));
-    sec.append(hd);t.conceptos.forEach(c=>sec.append(card(c)));main.append(sec);
+
+  // Also open all cards so you can see content
+  document.querySelectorAll('.concept-card').forEach(c => c.classList.add('open'));
+  // Prevent toggling cards while in edit mode
+  document.querySelectorAll('.concept-header').forEach(h => {
+    h._origClick = h.onclick;
+    h.onclick = null;
   });
 }
 
-/* ---------- subida de archivos ---------- */
-$('#pick').onclick=()=>$('#file').click();
-$('#file').onchange=e=>{load([...e.target.files]);e.target.value=''};
-addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});
-addEventListener('dragleave',e=>{if(!e.relatedTarget)dz.classList.remove('over')});
-addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');load([...e.dataTransfer.files])});
+function desactivarEditables() {
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    el.removeAttribute('contenteditable');
+    el.removeAttribute('spellcheck');
+    el.removeEventListener('click', stopProp);
+  });
+  // Restore card toggle
+  document.querySelectorAll('.concept-header').forEach(h => {
+    h.onclick = h._origClick || null;
+  });
+}
 
-/* ---------- acceso: misma cuenta de Firebase que index.html ---------- */
-const firebaseConfig = {
-  apiKey: "AIzaSyDkVk9ShAfKDzK_wtjzq7f_kb45CbMJZro",
-  authDomain: "testzema-beta.firebaseapp.com",
-  projectId: "testzema-beta",
-  storageBucket: "testzema-beta.firebasestorage.app",
-  messagingSenderId: "864177376939",
-  appId: "1:864177376939:web:8424898f4d4b47d88531ee",
-  // Si al crear Realtime Database Firebase te da otra URL, sustituye esta línea por la URL exacta.
-  databaseURL: "https://testzema-beta-default-rtdb.europe-west1.firebasedatabase.app"
-};
-function pathKeySeguro(nombre) {
-      let id = encodeURIComponent(String(nombre || 'sin_nombre'));
-      id = id.replace(/[.#$\[\]\/]/g, '_');
-      return id === '.' || id === '..' || id === '' ? 'sin_nombre' : id;
+function stopProp(e) { e.stopPropagation(); }
+
+function guardarEdicion() {
+  // Rebuild the JSON from the current DOM and save it
+  const name = document.getElementById('topbar-title').textContent;
+  const stored = loadData(name);
+  if (!stored) return;
+
+  // We rebuild bloques from DOM for each concept card
+  const sections = document.querySelectorAll('.topic-section');
+  sections.forEach((sec, ti) => {
+    const tema = stored.temas[ti];
+    if (!tema) return;
+    const cards = sec.querySelectorAll('.concept-card');
+    cards.forEach((card, ci) => {
+      const concepto = tema.conceptos[ci];
+      if (!concepto) return;
+
+      // Update pregunta (without the tag span)
+      const qEl = card.querySelector('.concept-q');
+      if (qEl) {
+        const clone = qEl.cloneNode(true);
+        clone.querySelectorAll('.tag').forEach(t => t.remove());
+        concepto.pregunta = clone.textContent.trim();
+      }
+
+      // Update each bloque html from DOM
+      const body = card.querySelector('.concept-body');
+      if (!body) return;
+
+      let bloqueIdx = 0;
+      body.querySelectorAll('.answer-box, .error-box, .blockquote, .formula, .grid-2, table.data-table').forEach(el => {
+        const b = concepto.bloques[bloqueIdx];
+        if (!b) { bloqueIdx++; return; }
+
+        if (el.classList.contains('answer-box')) {
+          const t = el.querySelector('.answer-text');
+          if (t) b.html = t.innerHTML;
+          const l = el.querySelector('.answer-label');
+          if (l) {
+            const lc = l.cloneNode(true);
+            lc.querySelectorAll('::before') // can't remove pseudo, just get text
+            b.label = l.textContent.replace(/^[—–\-]\s*/, '').trim() || null;
+          }
+        } else if (el.classList.contains('error-box')) {
+          b.html = el.innerHTML;
+        } else if (el.classList.contains('blockquote')) {
+          b.html = el.innerHTML;
+        } else if (el.classList.contains('formula')) {
+          const d = el.querySelector('div:last-child');
+          if (d) b.html = d.innerHTML;
+        } else if (el.classList.contains('grid-2')) {
+          el.querySelectorAll('.mini-card').forEach((mc, mi) => {
+            if (b.columnas && b.columnas[mi]) {
+              const tc = mc.querySelector('.mini-title');
+              const mc2 = mc.cloneNode(true);
+              mc2.querySelectorAll('.mini-title').forEach(t => t.remove());
+              b.columnas[mi].html = mc2.innerHTML.trim();
+            }
+          });
+        } else if (el.tagName === 'TABLE') {
+          const newFila = [];
+          el.querySelectorAll('tbody tr').forEach(tr => {
+            newFila.push([...tr.querySelectorAll('td')].map(td => td.innerHTML.trim()));
+          });
+          if (newFila.length) b.filas = newFila;
+          const newCabs = [...el.querySelectorAll('th')].map(th => th.textContent.trim());
+          if (newCabs.length) b.cabeceras = newCabs;
+        }
+        bloqueIdx++;
+      });
+    });
+  });
+
+  saveData(name, stored);
+}
+</script>
+
+<script type="module">
+/* =====================================================================
+   NÚCLEO (sin DOM)
+   Lee el texto de un JSON de apuntes, lo repara si la IA lo dejó mal,
+   lo valida contra la estructura del prompt y lo deja listo para guardar.
+   ===================================================================== */
+
+const TAG_COLORS = ['art', 'def', 'key', 'req', 'tabla', 'practica', 'fuente', 'tip'];
+const DEFAULT_ICON_BG = 'rgba(0,245,212,.12)';
+const COLOR_RE = /^(?:rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(?:,\s*(?:0|1|0?\.\d+|\d{1,3}%?)\s*)?\)|hsla?\([^()]{3,40}\)|#[0-9a-f]{3,8})$/i;
+
+class LoadError extends Error {
+  constructor(message, extra) {
+    super(message);
+    this.name = 'LoadError';
+    if (extra) Object.assign(this, extra);
+  }
+}
+
+/* ---------------------------- texto ---------------------------- */
+const ENTITIES = { nbsp: ' ', amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
+
+function decodeEntities(s) {
+  return s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => {
+    if (e[0] === '#') {
+      const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+      return code > 0 && code < 0x110000 ? String.fromCodePoint(code) : m;
     }
+    const v = ENTITIES[e.toLowerCase()];
+    return v === undefined ? m : v;
+  });
+}
+
+const str = v => (typeof v === 'string' ? v : typeof v === 'number' || typeof v === 'boolean' ? String(v) : '');
+const stripTags = s => s.replace(/<br\s*\/?>/gi, ' ').replace(/<\/(?:p|div|li)>/gi, ' ').replace(/<[^>]*>/g, '');
+const plain = v => decodeEntities(stripTags(str(v))).replace(/\s+/g, ' ').trim();
+const norm = v => plain(v).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const slug = v => norm(v).replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40);
+const short = (s, n = 40) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
+
+/** «null», vacío o undefined → null (regla 10 del prompt). */
+function optText(v) {
+  const s = plain(v);
+  return s && !/^(?:null|undefined)$/i.test(s) ? s : null;
+}
+
+function firstGrapheme(s) {
+  if (!s) return '';
+  try {
+    if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+      const it = new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(s)[Symbol.iterator]().next();
+      return it.done ? '' : it.value.segment;
+    }
+  } catch (_) { /* usamos el plan B */ }
+  return Array.from(s)[0] || '';
+}
+
+/* ------------------ posición del error (línea/columna) ------------------ */
+function lineCol(text, pos) {
+  let line = 1;
+  let last = -1;
+  for (let k = 0; k < pos && k < text.length; k++) {
+    if (text.charCodeAt(k) === 10) { line++; last = k; }
+  }
+  return { line, col: pos - last };
+}
+
+function snippetAt(text, pos) {
+  const start = text.lastIndexOf('\n', pos - 1) + 1;
+  let end = text.indexOf('\n', pos);
+  if (end === -1) end = text.length;
+  const line = text.slice(start, end).replace(/\r$/, '');
+  const col = Math.min(pos - start, line.length);
+  const W = 60;
+  const from = Math.max(0, col - W);
+  const to = Math.min(line.length, col + W);
+  const pre = from > 0 ? '…' : '';
+  const post = to < line.length ? '…' : '';
+  const shown = line.slice(from, to).replace(/\t/g, ' ');
+  return { text: pre + shown + post, caret: ' '.repeat(pre.length + (col - from)) + '^' };
+}
+
+/* ------------------------------------------------------------------
+   Reparación que conserva la longitud del texto (así las posiciones
+   de error siguen valiendo para el archivo original).
+   Solo se usa cuando JSON.parse falla; un JSON válido no pasa por aquí.
+   ------------------------------------------------------------------ */
+function repairJSON(text) {
+  const n = text.length;
+  const fixes = [];
+  const fix = (label, pos) => fixes.push({ label, pos });
+  let out = '';
+  let i = 0;
+  let inStr = false;
+  let strayOpen = false;
+
+  const skipSpace = from => {
+    let j = from;
+    while (j < n && (text[j] === ' ' || text[j] === '\n' || text[j] === '\r' || text[j] === '\t')) j++;
+    return j;
+  };
+  const nextSignificant = from => {
+    const j = skipSpace(from);
+    return j < n ? text[j] : '';
+  };
+  const canFollowString = ch => ch === '' || ch === ',' || ch === ':' || ch === '}' || ch === ']';
+
+  while (i < n) {
+    const c = text[i];
+    if (inStr) {
+      if (c === '\\') {
+        const x = text[i + 1];
+        if (x !== undefined && '"\\/bfnrtu'.includes(x)) { out += c + x; i += 2; continue; }
+        fix('barras invertidas sueltas', i);
+        out += ' '; i++; continue;
+      }
+      if (c === '"') {
+        const j = skipSpace(i + 1);
+        const nx = j < n ? text[j] : '';
+        let closing = canFollowString(nx);
+        // «"a" "b"»: si la comilla siguiente tampoco podría cerrar un texto, esta es
+        // el cierre de verdad y lo que falla es la estructura (falta una coma o « : »).
+        if (!closing && nx === '"' && !canFollowString(nextSignificant(j + 1))) closing = true;
+        if (closing) { inStr = false; out += c; i++; continue; }
+        // Una comilla que ninguna estructura JSON puede seguir: era parte del texto.
+        fix('comillas dobles sin escapar dentro de textos', i);
+        out += strayOpen ? '»' : '«';
+        strayOpen = !strayOpen;
+        i++; continue;
+      }
+      if (c < ' ') { fix('saltos de línea dentro de textos', i); out += ' '; i++; continue; }
+      out += c; i++; continue;
+    }
+    if (c === '"') { inStr = true; strayOpen = false; out += c; i++; continue; }
+    if (c === '/' && text[i + 1] === '/') {
+      fix('comentarios', i);
+      while (i < n && text[i] !== '\n') { out += ' '; i++; }
+      continue;
+    }
+    if (c === '/' && text[i + 1] === '*') {
+      fix('comentarios', i);
+      const end = text.indexOf('*/', i + 2);
+      const stop = end === -1 ? n : end + 2;
+      while (i < stop) { out += text[i] === '\n' ? '\n' : ' '; i++; }
+      continue;
+    }
+    if (c === ',') {
+      const nx = nextSignificant(i + 1);
+      if (nx === '}' || nx === ']') { fix('comas sobrantes', i); out += ' '; i++; continue; }
+    }
+    out += c; i++;
+  }
+  return { text: out, fixes };
+}
+
+/* ------------------------------------------------------------------
+   Validador JSON propio: localiza el primer error con línea y columna
+   igual en todos los navegadores, y distingue «cortado» de «mal escrito».
+   ------------------------------------------------------------------ */
+function scanJSON(text, { allowTrailing = false } = {}) {
+  const n = text.length;
+  let i = 0;
+  const open = [];
+  const NUM = /-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/y;
+
+  const stop = (pos, msg, eof = false) => {
+    const e = new Error(msg);
+    e.pos = pos;
+    e.eof = eof;
+    throw e;
+  };
+  const ws = () => {
+    while (i < n) {
+      const c = text.charCodeAt(i);
+      if (c === 32 || c === 10 || c === 13 || c === 9) i++; else break;
+    }
+  };
+  const string = () => {
+    i++;
+    while (i < n) {
+      const c = text[i];
+      if (c === '"') { i++; return; }
+      if (c === '\\') {
+        const x = text[i + 1];
+        if (x === undefined) stop(n, 'texto sin cerrar', true);
+        if (x === 'u') {
+          if (!/^[0-9a-fA-F]{4}$/.test(text.slice(i + 2, i + 6))) stop(i, 'Código \\u inválido dentro de un texto');
+          i += 6; continue;
+        }
+        if (!'"\\/bfnrt'.includes(x)) stop(i, 'Barra invertida inválida dentro de un texto');
+        i += 2; continue;
+      }
+      if (c < ' ') stop(i, 'Salto de línea o tabulación sin escapar dentro de un texto');
+      i++;
+    }
+    stop(n, 'texto sin cerrar', true);
+  };
+  const value = () => {
+    ws();
+    if (i >= n) stop(n, 'valor', true);
+    const c = text[i];
+    if (c === '{') return object();
+    if (c === '[') return array();
+    if (c === '"') return string();
+    if (c === '-' || (c >= '0' && c <= '9')) {
+      NUM.lastIndex = i;
+      const m = NUM.exec(text);
+      if (!m) stop(i, 'Número mal escrito');
+      i += m[0].length;
+      return;
+    }
+    for (const lit of ['true', 'false', 'null']) {
+      if (text.startsWith(lit, i)) { i += lit.length; return; }
+    }
+    stop(i, 'Se esperaba un valor (texto entre comillas, número, lista u objeto)');
+  };
+  const object = () => {
+    open.push('{'); i++; ws();
+    if (text[i] === '}') { i++; open.pop(); return; }
+    for (;;) {
+      ws();
+      if (i >= n) stop(n, 'propiedad', true);
+      if (text[i] !== '"') stop(i, 'Se esperaba el nombre de una propiedad entre comillas dobles');
+      string(); ws();
+      if (i >= n) stop(n, 'dos puntos', true);
+      if (text[i] !== ':') stop(i, 'Faltan los dos puntos después del nombre de la propiedad');
+      i++; value(); ws();
+      if (i >= n) stop(n, 'coma o cierre', true);
+      if (text[i] === ',') { i++; continue; }
+      if (text[i] === '}') { i++; open.pop(); return; }
+      stop(i, 'Se esperaba una coma o el cierre « } » del objeto');
+    }
+  };
+  const array = () => {
+    open.push('['); i++; ws();
+    if (text[i] === ']') { i++; open.pop(); return; }
+    for (;;) {
+      value(); ws();
+      if (i >= n) stop(n, 'coma o cierre', true);
+      if (text[i] === ',') { i++; continue; }
+      if (text[i] === ']') { i++; open.pop(); return; }
+      stop(i, 'Se esperaba una coma o el cierre « ] » de la lista');
+    }
+  };
+
+  try {
+    value();
+    if (!allowTrailing) {
+      ws();
+      if (i < n) stop(i, 'Hay texto sobrante después del JSON');
+    }
+    return { end: i };
+  } catch (e) {
+    if (e.pos === undefined) throw e;
+    return { error: { pos: e.pos, msg: e.message, eof: e.eof, open: open.slice() } };
+  }
+}
+
+function syntaxError(original, offset, err) {
+  if (err.eof) {
+    const braces = err.open.filter(c => c === '{').length;
+    const brackets = err.open.length - braces;
+    const falta = [];
+    if (braces) falta.push(plural(braces, 'llave', 'llaves'));
+    if (brackets) falta.push(plural(brackets, 'corchete', 'corchetes'));
+    return new LoadError('El JSON está cortado: el texto termina antes de cerrarse.', {
+      kind: 'truncated',
+      detail: falta.length ? 'Faltan por cerrar ' + falta.join(' y ') + '.' : null,
+      hint: 'Pide a la IA que continúe y sube la siguiente parte; se combinará con esta. Si ya tienes todas las partes, súbelas juntas.',
+      snippet: snippetAt(original, original.replace(/\s+$/, '').length),
+    });
+  }
+  const abs = offset + err.pos;
+  const { line, col } = lineCol(original, abs);
+  const before = original.slice(0, abs).replace(/\s+$/, '').slice(-1);
+  let hint = null;
+  if (/coma o el cierre/.test(err.msg) && before === '"') {
+    hint = 'Suele deberse a una comilla doble dentro de un texto. Escríbela como &quot; o cámbiala por comillas «latinas».';
+  } else if (/nombre de una propiedad/.test(err.msg)) {
+    hint = 'Revisa si sobra una coma o si falta una comilla justo antes de ese punto.';
+  }
+  return new LoadError('El JSON tiene un error de formato.', {
+    kind: 'syntax',
+    detail: 'Línea ' + line + ', columna ' + col + ': ' + err.msg + '.',
+    hint,
+    snippet: snippetAt(original, abs),
+  });
+}
+
+/** Texto → { value, notes, continues } o LoadError con explicación. */
+function readJSONText(input) {
+  const original = String(input).replace(/^\uFEFF/, '');
+  if (!original.trim()) throw new LoadError('El archivo está vacío.', { kind: 'empty' });
+
+  try {
+    return { value: JSON.parse(original), notes: [], continues: false };
+  } catch (_) { /* seguimos con la lectura tolerante */ }
+
+  const start = original.search(/[\[{]/);
+  if (start === -1) {
+    throw new LoadError('No se encontró ningún JSON en el texto (no hay llaves { } ni corchetes [ ]).', { kind: 'nojson' });
+  }
+  const body = original.slice(start);
+  const rep = repairJSON(body);
+  const scan = scanJSON(rep.text, { allowTrailing: true });
+  if (scan.error) throw syntaxError(original, start, scan.error);
+
+  let value;
+  try {
+    value = JSON.parse(rep.text.slice(0, scan.end));
+  } catch (e) {
+    throw new LoadError('El JSON no es válido: ' + e.message, { kind: 'syntax' });
+  }
+
+  const notes = [];
+  const counts = new Map();
+  rep.fixes.filter(f => f.pos < scan.end).forEach(f => counts.set(f.label, (counts.get(f.label) || 0) + 1));
+  if (counts.size) {
+    notes.push('Se corrigió automáticamente: ' + [...counts].map(([l, c]) => l + ' (' + c + ')').join(', ') + '.');
+  }
+  const lead = original.slice(0, start).replace(/```(?:json)?/gi, '').trim();
+  const trail = body.slice(scan.end);
+  const trailClean = trail.replace(/\/\/[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/```/g, '').trim();
+  if (lead || trailClean) notes.push('Se ignoró el texto que había fuera del JSON.');
+  return { value, notes, continues: /contin[uú]a/i.test(trail) };
+}
+
+/* ------------------------- estructura ------------------------- */
+const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+
+/** Cualquier raíz razonable → lista de asignaturas «en bruto». */
+function subjectsFromRoot(root, fallbackName) {
+  if (Array.isArray(root)) {
+    if (root.length && root.every(x => isObj(x) && Array.isArray(x.temas))) return root;
+    if (root.length && root.every(x => isObj(x) && Array.isArray(x.conceptos))) {
+      return [{ asignatura: fallbackName, temas: root }];
+    }
+    throw new LoadError('Este JSON es una lista, pero no contiene asignaturas con «temas».', { kind: 'structure' });
+  }
+  if (isObj(root)) {
+    if (Array.isArray(root.temas)) return [root];
+    if (Array.isArray(root.asignaturas) && root.asignaturas.length) return root.asignaturas;
+    if (Array.isArray(root.conceptos)) return [{ asignatura: fallbackName, temas: [root] }];
+  }
+  throw new LoadError('Falta la lista «temas».', {
+    kind: 'structure',
+    hint: 'El JSON debe tener «asignatura», «subtitulo» y una lista «temas», como en el prompt de apuntes.',
+  });
+}
+
+function normalizeBlock(b) {
+  if (!isObj(b)) return { skip: 'no es un objeto; se omite.' };
+  let tipo = str(b.tipo).trim().toLowerCase();
+  let note = null;
+  if (!tipo) {
+    if (Array.isArray(b.columnas)) tipo = 'grid2';
+    else if (Array.isArray(b.filas)) tipo = 'tabla';
+    else if (typeof b.html === 'string') tipo = 'answer';
+  }
+  switch (tipo) {
+    case 'answer': case 'blockquote': case 'error': case 'formula': {
+      const html = str(b.html);
+      if (!html.trim()) return { skip: 'el bloque «' + tipo + '» no tiene texto en «html»; se omite.' };
+      const block = { tipo, html };
+      if (tipo === 'answer') block.label = optText(b.label);
+      if (tipo === 'formula') block.titulo = optText(b.titulo);
+      return { block, note };
+    }
+    case 'grid2': {
+      const columnas = (Array.isArray(b.columnas) ? b.columnas : [])
+        .filter(isObj)
+        .map(c => ({ titulo: optText(c.titulo), html: str(c.html) }))
+        .filter(c => c.html.trim() || c.titulo);
+      if (!columnas.length) return { skip: 'el bloque «grid2» no tiene columnas con contenido; se omite.' };
+      return { block: { tipo, columnas } };
+    }
+    case 'tabla': {
+      const cabeceras = Array.isArray(b.cabeceras) ? b.cabeceras.map(str) : [];
+      const filas = (Array.isArray(b.filas) ? b.filas : [])
+        .map(r => (Array.isArray(r) ? r.map(str) : typeof r === 'string' ? [r] : null))
+        .filter(r => r && r.some(c => c.trim()));
+      if (!filas.length) return { skip: 'el bloque «tabla» no tiene filas; se omite.' };
+      return { block: { tipo, cabeceras, filas } };
+    }
+    default: {
+      // Un tipo desconocido con texto no se pierde: se muestra como respuesta.
+      const html = str(b.html);
+      if (html.trim()) {
+        return { block: { tipo: 'answer', html, label: optText(b.label) }, note: 'tipo de bloque desconocido («' + short(tipo || 'vacío', 20) + '»); se mostró como respuesta.' };
+      }
+      return { skip: 'tipo de bloque desconocido («' + short(tipo || 'vacío', 20) + '»); se omite.' };
+    }
+  }
+}
+
+function computeStats(subject) {
+  let conceptos = 0;
+  let trampas = 0;
+  for (const t of subject.temas) {
+    conceptos += t.conceptos.length;
+    for (const c of t.conceptos) for (const b of c.bloques) if (b.tipo === 'error') trampas++;
+  }
+  return { temas: subject.temas.length, conceptos, trampas };
+}
+
+/** Asignatura en bruto → { subject, warnings } limpia, o LoadError. */
+function normalizeSubject(raw, fallbackName) {
+  if (!isObj(raw)) throw new LoadError('Una de las asignaturas no es un objeto válido.', { kind: 'structure' });
+  if (!Array.isArray(raw.temas)) {
+    throw new LoadError('Falta la lista «temas»' + (raw.asignatura ? ' en «' + short(plain(raw.asignatura)) + '»' : '') + '.', { kind: 'structure' });
+  }
+
+  const warnings = [];
+  const warn = (where, msg) => warnings.push(where ? where + ': ' + msg : msg);
+
+  let asignatura = plain(raw.asignatura);
+  if (!asignatura) {
+    asignatura = plain(fallbackName) || 'Asignatura sin nombre';
+    warn('', 'falta «asignatura»; se usará «' + asignatura + '».');
+  }
+  const subtitulo = plain(raw.subtitulo);
+
+  const usedIds = new Set();
+  const temas = [];
+  const badColors = new Set();
+
+  raw.temas.forEach((t, ti) => {
+    const pos = 'Tema ' + (ti + 1);
+    if (!isObj(t)) { warn(pos, 'no es un objeto; se omite.'); return; }
+    if (!Array.isArray(t.conceptos)) { warn(pos, 'no tiene la lista «conceptos»; se omite.'); return; }
+
+    const titulo = plain(t.titulo) || plain(t.navLabel) || pos;
+    const where = pos + ' «' + short(titulo, 34) + '»';
+
+    let id = slug(t.id) || 't' + (ti + 1);
+    for (let k = 2; usedIds.has(id); k++) id = (slug(t.id) || 't' + (ti + 1)) + '_' + k;
+    usedIds.add(id);
+
+    const bg = str(t.iconBg).trim();
+    const conceptos = [];
+    t.conceptos.forEach((c, ci) => {
+      const cw = where + ' › concepto ' + (ci + 1);
+      if (!isObj(c)) { warn(cw, 'no es un objeto; se omite.'); return; }
+      if (!Array.isArray(c.bloques)) { warn(cw, 'no tiene la lista «bloques»; se omite.'); return; }
+
+      let pregunta = str(c.pregunta).trim();
+      if (!pregunta) { pregunta = 'Concepto ' + (ci + 1); warn(cw, 'no tiene «pregunta».'); }
+
+      let tagColor = str(c.tagColor).trim().toLowerCase();
+      if (!TAG_COLORS.includes(tagColor)) {
+        if (tagColor) badColors.add(tagColor);
+        tagColor = 'def';
+      }
+
+      const bloques = [];
+      c.bloques.forEach((b, bi) => {
+        const r = normalizeBlock(b);
+        const bw = cw + ' › bloque ' + (bi + 1);
+        if (r.skip) { warn(bw, r.skip); return; }
+        if (r.note) warn(bw, r.note);
+        bloques.push(r.block);
+      });
+      if (!bloques.length) { warn(cw, 'no tiene ningún bloque con contenido; se omite.'); return; }
+
+      conceptos.push({ tag: plain(c.tag), tagColor, pregunta, bloques });
+    });
+    if (!conceptos.length) { warn(where, 'se quedó sin conceptos válidos; se omite.'); return; }
+
+    temas.push({
+      id,
+      titulo,
+      navLabel: plain(t.navLabel) || titulo,
+      icono: firstGrapheme(plain(t.icono)) || '📖',
+      iconBg: COLOR_RE.test(bg) ? bg : DEFAULT_ICON_BG,
+      conceptos,
+    });
+  });
+
+  if (!temas.length) {
+    throw new LoadError('«' + short(asignatura) + '» no tiene ningún tema con contenido válido.', { kind: 'structure', warnings });
+  }
+  if (badColors.size) {
+    warn('', 'colores de etiqueta desconocidos (' + [...badColors].map(c => '«' + short(c, 14) + '»').join(', ') + '); se usó «def».');
+  }
+
+  const subject = { asignatura, subtitulo, temas };
+  subject.stats = computeStats(subject);
+  return { subject, warnings };
+}
+
+/* ------------------------- biblioteca ------------------------- */
+const nameKey = name => norm(name);
+
+function newId(name) {
+  return (slug(name).slice(0, 24) || 'asignatura') + '-' + Math.random().toString(36).slice(2, 7);
+}
+
+function uniqueName(name, takenKeys) {
+  let candidate = name;
+  for (let k = 2; takenKeys.has(nameKey(candidate)); k++) candidate = name + ' (' + k + ')';
+  return candidate;
+}
+
+/** Un tema entrante coincide con uno guardado por (id + título) o, si no, por título. */
+function matchTema(temas, t) {
+  const nt = norm(t.titulo);
+  let i = temas.findIndex(x => x.id === t.id && norm(x.titulo) === nt);
+  if (i === -1) i = temas.findIndex(x => norm(x.titulo) === nt);
+  return i;
+}
+
+function uniqueTemaId(temas, id) {
+  const used = new Set(temas.map(t => t.id));
+  let candidate = id;
+  for (let k = 2; used.has(candidate); k++) candidate = id + '_' + k;
+  return candidate;
+}
+
+function planMerge(base, incoming) {
+  const temas = base.temas.slice();
+  let added = 0;
+  let replaced = 0;
+  for (const t of incoming.temas) {
+    const i = matchTema(temas, t);
+    if (i === -1) { temas.push({ ...t, id: uniqueTemaId(temas, t.id) }); added++; } else { temas[i] = t; replaced++; }
+  }
+  return { added, replaced, temas };
+}
+
+function mergeSubjects(base, incoming) {
+  const { added, replaced, temas } = planMerge(base, incoming);
+  const subject = { ...base, subtitulo: incoming.subtitulo || base.subtitulo, temas };
+  subject.stats = computeStats(subject);
+  return { subject, added, replaced };
+}
+
+/* ------------------------- nube y fichas ------------------------- */
+const CHUNK_SIZE = 350000;
+
+/** Trocea un texto largo sin partir nunca un emoji (par sustituto) por la mitad. */
+function chunkTexto(texto, size = CHUNK_SIZE) {
+  const out = [];
+  for (let i = 0; i < texto.length;) {
+    let end = Math.min(i + size, texto.length);
+    if (end < texto.length) {
+      const c = texto.charCodeAt(end - 1);
+      if (c >= 0xD800 && c <= 0xDBFF) end--;
+    }
+    out.push(texto.slice(i, end));
+    i = end;
+  }
+  return out.length ? out : [''];
+}
+
+/** Solo enlaces http(s) o imágenes base64 normales; cualquier otra cosa → ''. */
+function safeImageUrl(u) {
+  const s = str(u).trim();
+  if (!s || s.length > 4000) return '';
+  if (/^https?:\/\/[^\s"'<>\\]+$/i.test(s)) return s;
+  if (/^data:image\/(?:png|jpe?g|gif|webp);base64,[a-z0-9+/=]+$/i.test(s)) return s;
+  return '';
+}
+
+/** «Derecho Mercantil» → «DM» (hasta 4 letras, como en Testzema). Ignora signos sueltos como «—» o «&». */
+function initialsOf(name) {
+  const first = w => (w.match(/[\p{L}\p{N}\p{Extended_Pictographic}]/u) || [''])[0];
+  return plain(name).split(/\s+/).map(first).filter(Boolean).map(c => c.toUpperCase()).slice(0, 4).join('');
+}
+
+/* =====================================================================
+   FIREBASE · mismo proyecto que tu Testzema (mismas cuentas de usuario)
+   Autenticación por email/contraseña + Realtime Database.
+   Las asignaturas de cada cuenta viven en:
+     usuarios/<uid>/apuntesIndex/<id>          ficha pequeña (nombre, portada, nº de temas…)
+     usuarios/<uid>/apuntes/<id>/chunks/0000…  el contenido, troceado
+   ===================================================================== */
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyDkVk9ShAfKDzK_wtjzq7f_kb45CbMJZro',
+  authDomain: 'testzema-beta.firebaseapp.com',
+  projectId: 'testzema-beta',
+  storageBucket: 'testzema-beta.firebasestorage.app',
+  messagingSenderId: '864177376939',
+  appId: '1:864177376939:web:8424898f4d4b47d88531ee',
+  databaseURL: 'https://testzema-beta-default-rtdb.europe-west1.firebasedatabase.app',
+};
+const SDK_URL = 'https://www.gstatic.com/firebasejs/10.12.2/';
+
+/* ---- Igual que en Testzema: cómo un «usuario» se convierte en clave y en email ---- */
+function pathKeySeguro(nombre) {
+  let id = encodeURIComponent(String(nombre || 'sin_nombre'));
+  id = id.replace(/[.#$\[\]\/]/g, '_');
+  return id === '.' || id === '..' || id === '' ? 'sin_nombre' : id;
+}
 
 function claveUsuario(nombre) {
-      const normalizado = String(nombre || '').trim().toLowerCase().replace(/[^a-z0-9._-]/g, '').replace(/^\.+|\.+$/g, '');
-      return pathKeySeguro(normalizado || 'usuario');
+  const normalizado = String(nombre || '').trim().toLowerCase().replace(/[^a-z0-9._-]/g, '').replace(/^\.+|\.+$/g, '');
+  return pathKeySeguro(normalizado || 'usuario');
+}
+
+function normalizarUsuarioAEmail(valor) {
+  const raw = String(valor || '').trim();
+  if (!raw) return '';
+  if (raw.includes('@')) return raw.toLowerCase();
+  const user = raw.toLowerCase().replace(/[^a-z0-9._-]/g, '').replace(/^\.+|\.+$/g, '');
+  return (user || 'usuario') + '@testzema.local';
+}
+
+function nombreVisibleUsuario(valor) {
+  const raw = String(valor || '').trim();
+  if (!raw) return 'Usuario';
+  return raw.includes('@') ? raw.split('@')[0] : raw;
+}
+
+/* ---- Mensajes de error (los de Testzema + algunos casos más) ---- */
+const esPermisoDenegado = e => /permission[-_ ]denied/i.test(String((e && e.code) || '') + ' ' + String((e && e.message) || ''));
+
+function firebaseAuthMsg(e) {
+  const code = String((e && e.code) || '');
+  if (code.includes('auth/invalid-credential') || code.includes('auth/wrong-password') || code.includes('auth/user-not-found')) return 'Usuario o contraseña incorrectos.';
+  if (code.includes('auth/email-already-in-use')) return 'Ese usuario ya existe. Pulsa Entrar.';
+  if (code.includes('auth/weak-password')) return 'La contraseña es demasiado corta. Mínimo 6 caracteres.';
+  if (code.includes('auth/invalid-email')) return 'Usuario/email no válido.';
+  if (code.includes('auth/operation-not-allowed')) return 'Activa Email/Password en Firebase Authentication.';
+  if (code.includes('auth/too-many-requests')) return 'Demasiados intentos. Espera un poco antes de volver a intentarlo.';
+  if (code.includes('auth/network-request-failed')) return 'No hay conexión con Firebase. Revisa tu conexión a internet.';
+  if (esPermisoDenegado(e)) return 'Realtime Database ha bloqueado el acceso. Revisa las reglas de seguridad.';
+  return (e && e.message) ? e.message : 'Error de autenticación.';
+}
+
+function firebaseAuthResetMsg(e) {
+  const code = String((e && e.code) || '');
+  if (code.includes('auth/user-not-found')) return 'No existe ninguna cuenta con ese usuario o email.';
+  if (code.includes('auth/invalid-email')) return 'Usuario/email no válido.';
+  if (code.includes('auth/too-many-requests')) return 'Demasiados intentos. Espera un poco antes de volver a intentarlo.';
+  return (e && e.message) ? e.message : 'No se ha podido enviar el correo de recuperación.';
+}
+
+/* ---- La API que usa la app. Hasta que Firebase carga, todo avisa de que no está listo. ---- */
+const noListo = async () => { throw new Error('Firebase no está inicializado'); };
+const Backend = {
+  ready: false,
+  login: noListo, register: noListo, logout: noListo, resetPassword: noListo,
+  resolveUsername: async () => null,
+  usuarioDisponible: async () => true,
+  guardarUsuario: noListo,
+  listar: noListo, leer: noListo, guardar: noListo, actualizarMeta: noListo, borrar: noListo,
+};
+
+async function iniciarFirebase(onUser) {
+  const [appM, dbM, authM] = await Promise.all([
+    import(SDK_URL + 'firebase-app.js'),
+    import(SDK_URL + 'firebase-database.js'),
+    import(SDK_URL + 'firebase-auth.js'),
+  ]);
+  const { initializeApp } = appM;
+  const { getDatabase, ref, get, set, update } = dbM;
+  const {
+    getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signOut, setPersistence, browserLocalPersistence, updateProfile, sendPasswordResetEmail,
+  } = authM;
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app, firebaseConfig.databaseURL);
+  const auth = getAuth(app);
+  await setPersistence(auth, browserLocalPersistence);
+
+  const uid = () => {
+    const u = auth.currentUser;
+    if (!u) throw new Error('No hay usuario autenticado.');
+    return u.uid;
+  };
+  const rutaIndice = (u, id) => 'usuarios/' + u + '/apuntesIndex/' + id;
+  const rutaDatos = (u, id) => 'usuarios/' + u + '/apuntes/' + id;
+  const num = v => (Number.isFinite(Number(v)) ? Number(v) : 0);
+
+  Object.assign(Backend, {
+    ready: true,
+
+    /* -------- cuentas (igual que Testzema) -------- */
+    login: (email, password) => signInWithEmailAndPassword(auth, email, password),
+    async register(email, password, displayName) {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      if (displayName) await updateProfile(cred.user, { displayName });
+      return cred;
+    },
+    logout: () => signOut(auth),
+    resetPassword: email => sendPasswordResetEmail(auth, email),
+    // «usuario» → email real de la cuenta (para entrar o recuperar la contraseña escribiendo solo el usuario)
+    async resolveUsername(rawUser) {
+      const snap = await get(ref(db, 'usernames/' + claveUsuario(rawUser)));
+      return snap.exists() && snap.val() ? (snap.val().email || null) : null;
+    },
+    async usuarioDisponible(rawUser) {
+      const snap = await get(ref(db, 'usernames/' + claveUsuario(rawUser)));
+      return !snap.exists();
+    },
+    async guardarUsuario(rawUser, email) {
+      const u = auth.currentUser ? auth.currentUser.uid : null;
+      await set(ref(db, 'usernames/' + claveUsuario(rawUser)), { email: String(email || '').toLowerCase(), uid: u });
+    },
+
+    /* -------- asignaturas de la cuenta -------- */
+    async listar() {
+      const snap = await get(ref(db, 'usuarios/' + uid() + '/apuntesIndex'));
+      if (!snap.exists()) return [];
+      return Object.values(snap.val() || {})
+        .filter(m => m && m.id && m.asignatura)
+        .map(m => ({
+          id: String(m.id), key: String(m.key || ''), asignatura: String(m.asignatura),
+          subtitulo: String(m.subtitulo || ''), image: String(m.image || ''),
+          temas: num(m.temas), conceptos: num(m.conceptos), trampas: num(m.trampas),
+          chunks: num(m.chunks), bytes: num(m.bytes), addedAt: num(m.addedAt), updatedAt: num(m.updatedAt),
+        }));
+    },
+
+    async leer(id) {
+      const snap = await get(ref(db, rutaDatos(uid(), id) + '/chunks'));
+      if (!snap.exists()) throw new Error('No se encontró el contenido de esta asignatura en tu cuenta.');
+      const piezas = Object.values(snap.val() || {})
+        .sort((a, b) => num(a && a.index) - num(b && b.index))
+        .map(x => String((x && x.payload) || ''));
+      let data;
+      try { data = JSON.parse(piezas.join('')); } catch (_) { data = null; }
+      if (!data || !Array.isArray(data.temas)) throw new Error('El contenido guardado de esta asignatura está dañado.');
+      return data;
+    },
+
+    /** Escribe contenido y ficha en una sola operación atómica: o se guarda todo o nada. */
+    async guardar(s) {
+      const u = uid();
+      const texto = JSON.stringify({ subtitulo: s.subtitulo || '', temas: s.temas });
+      const piezas = chunkTexto(texto);
+      const chunks = {};
+      piezas.forEach((payload, index) => { chunks[String(index).padStart(4, '0')] = { index, payload }; });
+      const meta = {
+        id: s.id, key: s.key, asignatura: s.asignatura, subtitulo: s.subtitulo || '', image: s.image || '',
+        temas: s.stats.temas, conceptos: s.stats.conceptos, trampas: s.stats.trampas,
+        chunks: piezas.length, bytes: texto.length, addedAt: s.addedAt, updatedAt: s.updatedAt,
+      };
+      await update(ref(db), {
+        [rutaDatos(u, s.id) + '/chunks']: chunks,
+        [rutaIndice(u, s.id)]: meta,
+      });
+      return meta;
+    },
+
+    async actualizarMeta(id, patch) {
+      await update(ref(db, rutaIndice(uid(), id)), patch);
+    },
+
+    async borrar(id) {
+      const u = uid();
+      await update(ref(db), { [rutaDatos(u, id)]: null, [rutaIndice(u, id)]: null });
+    },
+  });
+
+  onAuthStateChanged(auth, user => {
+    onUser(user ? { uid: user.uid, email: user.email || '', displayName: user.displayName || '' } : null);
+  });
+}
+
+/* =====================================================================
+   APP (interfaz)
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const MAX_BYTES = 25 * 1024 * 1024;
+const AUTO_OPEN_MAX = 30;
+
+const E = {
+  auth: $('auth-screen'), authCard: $('auth-card'), authTabLogin: $('auth-tab-login'), authTabRegister: $('auth-tab-register'),
+  authUser: $('auth-user'), authPass: $('auth-pass'), authRecoveryEmail: $('auth-recovery-email'),
+  authSubmit: $('auth-submit-btn'), authForgot: $('auth-forgot'), authMsg: $('auth-msg'),
+  netflix: $('netflix-screen'), nfSub: $('netflix-subtitle'), grid: $('netflix-grid'),
+  userPill: $('auth-user-pill'), logout: $('btn-logout'), manage: $('btn-manage'), skipLabel: $('skip-label'), skip: $('skip-today'),
+  subject: $('view-subject'), back: $('btn-back'), title: $('s-title'), sub: $('s-sub'), stats: $('s-stats'),
+  q: $('q'), count: $('result-count'), openAll: $('btn-open-all'), closeAll: $('btn-close-all'),
+  nav: $('nav'), pills: $('nav-pills'), more: $('nav-more'), sections: $('sections'), none: $('no-results'),
+  dlg: $('dlg'), dlgTitle: $('dlg-title'), dlgText: $('dlg-text'), dlgActions: $('dlg-actions'),
+  add: $('add-dlg'), addClose: $('add-close'), drop: $('drop'), file: $('file'), pick: $('btn-pick'),
+  pasteBtn: $('btn-paste'), pastePanel: $('paste'), pasteText: $('paste-text'), pasteLoad: $('paste-load'), pasteCancel: $('paste-cancel'),
+  report: $('report'),
+  edit: $('edit-dlg'), editForm: $('edit-form'), editName: $('edit-name'), editImage: $('edit-image'),
+  editMsg: $('edit-msg'), editCancel: $('edit-cancel'), editSave: $('edit-save'),
+};
+
+const S = {
+  user: null,          // { uid, email, displayName }
+  loaded: false,       // ya tenemos la lista de asignaturas de esta cuenta
+  index: new Map(),    // id → ficha de la asignatura
+  data: new Map(),     // id → { subtitulo, temas } (caché de la sesión)
+  manage: false,
+  fresh: new Set(),    // fichas recién añadidas (se resaltan una vez)
+  busy: false,
+  pendingAuthError: '',
+  // visor
+  subject: null,
+  topic: 'all',
+  query: '',
+  sections: [],
+  cards: [],
+  auto: new Set(),
+};
+
+/* ------------------------- utilidades de DOM ------------------------- */
+function h(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  if (props) {
+    for (const [k, v] of Object.entries(props)) {
+      if (v == null || v === false) continue;
+      if (k === 'class') e.className = v;
+      else if (k === 'text') e.textContent = v;
+      else e.setAttribute(k, v === true ? '' : v);
+    }
+  }
+  for (const kid of kids.flat()) {
+    if (kid == null || kid === false) continue;
+    e.append(typeof kid === 'object' ? kid : document.createTextNode(String(kid)));
+  }
+  return e;
+}
+
+const debounce = (fn, ms) => { let t = 0; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+
+/* HTML de los apuntes → solo etiquetas permitidas y sin atributos. Nada del JSON se inserta tal cual. */
+const DROP_TAGS = new Set(['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'EMBED', 'SVG', 'MATH', 'TEMPLATE', 'NOSCRIPT', 'LINK', 'META', 'TITLE', 'FORM', 'INPUT', 'BUTTON', 'TEXTAREA', 'SELECT', 'IMG', 'AUDIO', 'VIDEO', 'CANVAS']);
+const KEEP_TAGS = new Set(['STRONG', 'B', 'EM', 'I', 'U', 'UL', 'OL', 'LI', 'BR', 'P', 'DIV', 'SPAN', 'SUP', 'SUB', 'CODE', 'MARK', 'SMALL']);
+
+function cleanInto(target, source) {
+  for (const node of Array.from(source.childNodes)) {
+    if (node.nodeType === 3) { target.appendChild(document.createTextNode(node.nodeValue)); continue; }
+    if (node.nodeType !== 1) continue;
+    const tag = node.tagName.toUpperCase();
+    if (DROP_TAGS.has(tag)) continue;
+    if (KEEP_TAGS.has(tag)) {
+      const copy = document.createElement(tag.toLowerCase());
+      cleanInto(copy, node);
+      target.appendChild(copy);
+    } else {
+      cleanInto(target, node);
+    }
+  }
+}
+
+function rich(html) {
+  const s = String(html == null ? '' : html);
+  if (!/[<&]/.test(s)) return document.createTextNode(s);
+  const doc = new DOMParser().parseFromString('<!doctype html><body>' + s, 'text/html');
+  const frag = document.createDocumentFragment();
+  cleanInto(frag, doc.body);
+  return frag;
+}
+
+/* ---------------- preferencias pequeñas, por cuenta y por dispositivo ---------------- */
+const pref = {
+  key: k => 'apuntes_' + (S.user ? S.user.uid : 'anon') + '_' + k,
+  get(k) { try { return localStorage.getItem(this.key(k)); } catch (_) { return null; } },
+  set(k, v) { try { localStorage.setItem(this.key(k), v); } catch (_) { /* sin almacenamiento: no pasa nada */ } },
+  remove(k) { try { localStorage.removeItem(this.key(k)); } catch (_) { /* idem */ } },
+};
+
+/* ------------------------------- diálogos ------------------------------- */
+function ask({ title, text, choices }) {
+  return new Promise(resolve => {
+    if (typeof E.dlg.showModal !== 'function') {
+      const msg = title + '\n\n' + [].concat(text).map(n => n.textContent).join('\n');
+      resolve(window.confirm(msg) ? choices[0].id : null);
+      return;
+    }
+    E.dlgTitle.textContent = title;
+    E.dlgText.replaceChildren(...[].concat(text));
+    E.dlgActions.className = 'dlg-actions ' + (choices.some(c => c.desc) ? 'stack' : 'row');
+    E.dlgActions.replaceChildren(...choices.map(c =>
+      h('button', { type: 'submit', value: c.id, class: 'choice ' + (c.kind || '') },
+        h('span', { class: 'c-label', text: c.label }),
+        c.desc ? h('span', { class: 'c-desc', text: c.desc }) : null)));
+    E.dlg.returnValue = '';
+    const done = () => { E.dlg.removeEventListener('close', done); resolve(E.dlg.returnValue || null); };
+    E.dlg.addEventListener('close', done);
+    E.dlg.showModal();
+  });
+}
+E.dlg.addEventListener('click', e => { if (e.target === E.dlg) E.dlg.close(); });
+
+const notify = (title, message) => ask({
+  title,
+  text: [h('p', null, message)],
+  choices: [{ id: 'ok', label: 'Entendido', kind: 'primary' }],
+});
+
+const anyDialogOpen = () => E.dlg.open || E.add.open || E.edit.open;
+
+/* ------------------------------- pantallas ------------------------------- */
+function showScreen(name, { booting = false } = {}) {
+  E.auth.classList.toggle('auth-hidden', name !== 'auth');
+  E.netflix.classList.toggle('show', name === 'netflix');
+  E.netflix.classList.toggle('netflix-booting', name === 'netflix' && booting);
+  E.netflix.inert = name !== 'netflix';
+  E.subject.hidden = name !== 'viewer';
+  document.title = name === 'viewer' && S.subject ? S.subject.asignatura + ' · Mis Apuntes' : 'Mis Apuntes';
+  if (name === 'viewer') window.scrollTo(0, 0);
+}
+
+function resetAccountState() {
+  S.user = null;
+  S.loaded = false;
+  S.index = new Map();
+  S.data = new Map();
+  S.manage = false;
+  S.subject = null;
+  S.sections = [];
+  S.cards = [];
+  S.auto.clear();
+  E.sections.replaceChildren();
+  E.grid.replaceChildren();
+  if (E.add.open) E.add.close();
+  if (E.edit.open) E.edit.close();
+  if (E.dlg.open) E.dlg.close();
+}
+
+/* ====================================================================
+   ACCESO (usuario y contraseña · igual que en Testzema)
+   ==================================================================== */
+let authModo = 'login';
+
+function authSetMsg(texto, tipo = '') {
+  E.authMsg.textContent = texto || '';
+  E.authMsg.className = 'auth-msg' + (tipo ? ' ' + tipo : '');
+}
+const authSetLoading = on => E.authCard.classList.toggle('auth-loading', !!on);
+
+function authSetModo(modo) {
+  authModo = modo === 'register' ? 'register' : 'login';
+  E.authCard.dataset.modo = authModo;
+  E.authTabLogin.classList.toggle('active', authModo === 'login');
+  E.authTabRegister.classList.toggle('active', authModo === 'register');
+  E.authTabLogin.setAttribute('aria-selected', authModo === 'login' ? 'true' : 'false');
+  E.authTabRegister.setAttribute('aria-selected', authModo === 'register' ? 'true' : 'false');
+  E.authSubmit.textContent = authModo === 'register' ? 'Crear cuenta' : 'Entrar';
+  E.authPass.setAttribute('autocomplete', authModo === 'register' ? 'new-password' : 'current-password');
+  authSetMsg('');
+}
+
+// «usuario» o «email» tal como lo escribe la persona → email real con el que hablar con Firebase.
+async function resolverEmailDeUsuario(valor) {
+  const raw = String(valor || '').trim();
+  if (!raw) return '';
+  if (raw.includes('@')) return raw.toLowerCase();
+  try {
+    const real = await Backend.resolveUsername(raw);
+    if (real) return real;
+  } catch (e) {
+    console.warn('No se pudo resolver el usuario, se usa el email por defecto:', e);
+  }
+  return normalizarUsuarioAEmail(raw);
+}
+
+async function authEntrar() {
+  const rawUser = E.authUser.value;
+  const pass = E.authPass.value;
+  if (!rawUser.trim() || !pass) { authSetMsg('Escribe usuario y contraseña.', 'err'); return; }
+  if (!Backend.ready) { authSetMsg('Firebase Auth no está inicializado. Revisa la configuración.', 'err'); return; }
+  try {
+    authSetLoading(true);
+    authSetMsg('Entrando…');
+    const email = await resolverEmailDeUsuario(rawUser);
+    await Backend.login(email, pass);
+  } catch (e) {
+    console.error(e);
+    authSetMsg(firebaseAuthMsg(e), 'err');
+  } finally {
+    authSetLoading(false);
+  }
+}
+
+async function authCrearCuenta() {
+  const rawUser = E.authUser.value;
+  const pass = E.authPass.value;
+  const rawRecovery = E.authRecoveryEmail.value.trim();
+  if (!rawUser.trim() || !pass) { authSetMsg('Escribe usuario y contraseña.', 'err'); return; }
+  if (pass.length < 6) { authSetMsg('La contraseña debe tener al menos 6 caracteres.', 'err'); return; }
+  if (!Backend.ready) { authSetMsg('Firebase Auth no está inicializado. Revisa la configuración.', 'err'); return; }
+
+  // Si en «Usuario» ya han escrito un email de verdad, ese ES el email de la cuenta.
+  const esEmailDirecto = rawUser.includes('@');
+  const email = esEmailDirecto
+    ? rawUser.trim().toLowerCase()
+    : (rawRecovery ? rawRecovery.toLowerCase() : normalizarUsuarioAEmail(rawUser));
+
+  try {
+    authSetLoading(true);
+    if (!esEmailDirecto) {
+      authSetMsg('Comprobando disponibilidad…');
+      if (!(await Backend.usuarioDisponible(rawUser))) {
+        authSetMsg('Ese nombre de usuario ya está en uso. Elige otro o pulsa Entrar si es tuyo.', 'err');
+        return;
+      }
+    }
+    authSetMsg('Creando cuenta…');
+    await Backend.register(email, pass, nombreVisibleUsuario(rawUser));
+    if (!esEmailDirecto) {
+      try { await Backend.guardarUsuario(rawUser, email); } catch (e) { console.warn('No se pudo guardar la relación usuario-email:', e); }
+    }
+    authSetMsg('Cuenta creada. Cargando tus datos…', 'ok');
+  } catch (e) {
+    console.error(e);
+    authSetMsg(firebaseAuthMsg(e), 'err');
+  } finally {
+    authSetLoading(false);
+  }
+}
+
+async function authRecuperarContrasena() {
+  const rawUser = E.authUser.value;
+  if (!rawUser.trim()) {
+    authSetMsg('Escribe tu usuario o email arriba y vuelve a pulsar «He olvidado la contraseña».', 'err');
+    E.authUser.focus();
+    return;
+  }
+  if (!Backend.ready) { authSetMsg('Firebase Auth no está inicializado. Revisa la configuración.', 'err'); return; }
+  try {
+    authSetLoading(true);
+    authSetMsg('Buscando tu cuenta…');
+    const email = await resolverEmailDeUsuario(rawUser);
+    if (email.endsWith('@testzema.local')) {
+      authSetMsg('Esa cuenta no tiene un email de recuperación asociado, así que no podemos enviar un correo. Si al crearla indicaste un email de recuperación, escríbelo arriba en vez del usuario.', 'err');
+      return;
+    }
+    authSetMsg('Enviando correo de recuperación…');
+    await Backend.resetPassword(email);
+    authSetMsg('Te hemos enviado un email a ' + email + ' con instrucciones para restablecer tu contraseña. Revisa también la carpeta de spam.', 'ok');
+  } catch (e) {
+    console.error(e);
+    authSetMsg(firebaseAuthResetMsg(e), 'err');
+  } finally {
+    authSetLoading(false);
+  }
+}
+
+E.authTabLogin.addEventListener('click', () => authSetModo('login'));
+E.authTabRegister.addEventListener('click', () => authSetModo('register'));
+E.authForgot.addEventListener('click', authRecuperarContrasena);
+E.authCard.addEventListener('submit', e => {
+  e.preventDefault();
+  if (authModo === 'register') authCrearCuenta(); else authEntrar();
+});
+
+E.logout.addEventListener('click', async () => {
+  try { await Backend.logout(); } catch (e) { console.warn('No se pudo cerrar la sesión:', e); }
+});
+
+/* ====================================================================
+   SESIÓN: qué pasa cuando Firebase dice «hay/no hay usuario»
+   ==================================================================== */
+let authToken = 0;
+
+async function handleAuth(user) {
+  const token = ++authToken;
+  if (!user) {
+    const pending = S.pendingAuthError;
+    S.pendingAuthError = '';
+    resetAccountState();
+    showScreen('auth');
+    authSetModo('login');
+    if (pending) authSetMsg(pending, 'err');
+    else authSetMsg('Entra o crea una cuenta para cargar tus asignaturas.');
+    return;
+  }
+  if (S.user && S.user.uid === user.uid && S.loaded) return; // p. ej. refresco del token
+  S.user = user;
+  showScreen('netflix', { booting: true });
+  try {
+    await initAccount(user);
+    if (token !== authToken) return;
+    E.authPass.value = '';
+    E.authRecoveryEmail.value = '';
+    authSetMsg('Sesión iniciada.', 'ok');
+  } catch (e) {
+    if (token !== authToken) return;
+    console.error(e);
+    // Con la sesión abierta pero sin poder leer los datos, lo más claro es volver al acceso con el motivo.
+    S.pendingAuthError = firebaseAuthMsg(e);
+    try { await Backend.logout(); } catch (_) { handleAuth(null); }
+  }
+}
+
+async function initAccount(user) {
+  S.index = new Map();
+  S.data = new Map();
+  S.manage = false;
+  const fichas = await Backend.listar();
+  fichas.forEach(m => S.index.set(m.id, m));
+  S.loaded = true;
+
+  E.userPill.textContent = '👤 ' + (user.displayName || (user.email ? user.email.split('@')[0] : 'Usuario'));
+  E.userPill.title = user.email || user.uid;
+
+  const last = pref.get('lastSubject');
+  if (pref.get('skipSubjectDate') === new Date().toDateString() && last && S.index.has(last)) {
+    const ok = await openSubject(last, { fromNetflix: false });
+    if (ok) return;
+  }
+  goNetflix();
+}
+
+/* ====================================================================
+   MODO NETFLIX
+   ==================================================================== */
+function avatarOf(m) {
+  const avatar = h('div', { class: 'netflix-avatar' });
+  const ini = initialsOf(m.asignatura) || '?';
+  // Las iniciales van siempre debajo: si la portada no carga, se ven ellas.
+  avatar.append(h('span', { class: 'netflix-initials', 'data-n': String(Array.from(ini).length), text: ini }));
+  const cover = safeImageUrl(m.image);
+  if (cover) {
+    const img = h('img', { class: 'netflix-cover', alt: '', decoding: 'async', referrerpolicy: 'no-referrer', draggable: 'false' });
+    img.addEventListener('load', () => avatar.classList.add('has-cover'));
+    img.addEventListener('error', () => img.remove());
+    img.src = cover;
+    avatar.append(img);
+  }
+  return avatar;
+}
+
+function netflixCard(m) {
+  const open = h('button', { type: 'button', class: 'netflix-open', 'aria-label': (S.manage ? 'Editar ' : 'Abrir ') + m.asignatura },
+    avatarOf(m),
+    h('span', { class: 'netflix-name', text: m.asignatura }),
+    h('span', { class: 'netflix-meta', text: plural(m.temas, 'tema', 'temas') }));
+  open.addEventListener('click', () => (S.manage ? openEdit(m.id) : openSubject(m.id, { fromNetflix: true })));
+
+  const card = h('div', {
+    class: 'netflix-card' + (S.manage ? ' manage' : '') + (S.fresh.has(m.id) ? ' fresh' : ''),
+    'data-id': m.id, role: 'listitem',
+  }, open);
+
+  if (S.manage) {
+    const del = h('button', { type: 'button', class: 'delete-overlay', title: 'Eliminar asignatura', 'aria-label': 'Eliminar ' + m.asignatura, text: '❌' });
+    del.addEventListener('click', () => eliminarAsignatura(m.id));
+    const dl = h('button', { type: 'button', class: 'download-overlay', title: 'Descargar solo esta asignatura', 'aria-label': 'Descargar ' + m.asignatura, text: '💾' });
+    dl.addEventListener('click', () => descargarAsignatura(m.id));
+    card.append(del, dl);
+  }
+  return card;
+}
+
+function addCard() {
+  const open = h('button', { type: 'button', class: 'netflix-open', 'aria-label': 'Nueva asignatura' },
+    h('div', { class: 'netflix-avatar add' }, h('span', { class: 'netflix-plus', text: '➕' })),
+    h('span', { class: 'netflix-name', text: 'Nueva asignatura' }));
+  open.addEventListener('click', () => openAdd());
+  return h('div', { class: 'netflix-card', role: 'listitem' }, open);
+}
+
+function renderNetflix() {
+  const list = [...S.index.values()].sort((a, b) => (a.addedAt - b.addedAt) || a.asignatura.localeCompare(b.asignatura, 'es'));
+  E.grid.replaceChildren(...list.map(netflixCard), ...(S.manage ? [] : [addCard()]));
+  E.nfSub.textContent = list.length
+    ? 'Elige una asignatura. Cada cuenta guarda las suyas por separado.'
+    : 'Todavía no tienes asignaturas. Pulsa «Nueva asignatura» y sube el .json que te genera la IA.';
+  E.skip.checked = false;
+  E.manage.textContent = S.manage ? '✅ Terminar edición' : '⚙️ Administrar asignaturas';
+  E.manage.classList.toggle('active', S.manage);
+  E.skipLabel.hidden = S.manage;
+  E.netflix.classList.remove('netflix-booting');
+  S.fresh = new Set();
+}
+
+function goNetflix() {
+  S.subject = null;
+  S.sections = [];
+  S.cards = [];
+  S.auto.clear();
+  E.sections.replaceChildren();
+  renderNetflix();
+  showScreen('netflix');
+}
+
+E.manage.addEventListener('click', () => { S.manage = !S.manage; renderNetflix(); });
+
+// Flechas para moverse por las asignaturas (Intro/Espacio abren la que tenga el foco).
+document.addEventListener('keydown', e => {
+  if (!E.netflix.classList.contains('show') || anyDialogOpen()) return;
+  const tag = (document.activeElement && document.activeElement.tagName) || '';
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(tag)) return;
+  let delta = 0;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') delta = 1;
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') delta = -1;
+  else return;
+  const items = Array.from(E.grid.querySelectorAll('.netflix-open'));
+  if (!items.length) return;
+  e.preventDefault();
+  const i = items.indexOf(document.activeElement);
+  const next = i < 0 ? (delta > 0 ? 0 : items.length - 1) : (i + delta + items.length) % items.length;
+  items[next].focus();
+});
+
+/* ---- abrir / borrar / descargar / editar ---- */
+async function getData(id) {
+  if (S.data.has(id)) return S.data.get(id);
+  const meta = S.index.get(id);
+  const raw = await Backend.leer(id);
+  // Se vuelve a pasar por el validador: nada de lo guardado llega al visor sin limpiar.
+  const { subject } = normalizeSubject({ asignatura: meta ? meta.asignatura : '', subtitulo: raw.subtitulo, temas: raw.temas }, meta ? meta.asignatura : '');
+  const data = { subtitulo: subject.subtitulo, temas: subject.temas };
+  S.data.set(id, data);
+  return data;
+}
+
+const cardOf = id => E.grid.querySelector('.netflix-card[data-id="' + id + '"]');
+
+/** Devuelve true si se abrió. */
+async function openSubject(id, { fromNetflix = true } = {}) {
+  const meta = S.index.get(id);
+  if (!meta) return false;
+  const card = cardOf(id);
+  if (card) card.classList.add('loading');
+  try {
+    const data = await getData(id);
+    pref.set('lastSubject', id);
+    if (fromNetflix) {
+      if (E.skip.checked) pref.set('skipSubjectDate', new Date().toDateString());
+      else pref.remove('skipSubjectDate');
+    }
+    S.subject = { ...meta, subtitulo: meta.subtitulo || data.subtitulo, temas: data.temas };
+    document.getElementById('topbar-title').textContent = S.subject.asignatura;
+    S.topic = 'all';
+    S.query = '';
+    S.auto.clear();
+    E.q.value = '';
+    E.title.textContent = S.subject.asignatura;
+    E.sub.textContent = S.subject.subtitulo;
+    E.sub.hidden = !S.subject.subtitulo;
+    const st = computeStats(S.subject);
+    E.stats.replaceChildren(...[
+      statPill('c', plural(st.temas, 'tema', 'temas')),
+      statPill('p', plural(st.conceptos, 'concepto', 'conceptos')),
+      st.trampas ? statPill('y', plural(st.trampas, 'trampa de examen', 'trampas de examen')) : null,
+    ].filter(Boolean));
+    buildNav(S.subject);
+    buildSections(S.subject);
+    showScreen('viewer');
+    applyFilters();
+    requestAnimationFrame(updateNavClamp);
+    return true;
+  } catch (e) {
+    console.error(e);
+    if (card) card.classList.remove('loading');
+    await notify('No se pudo abrir «' + meta.asignatura + '»', firebaseAuthMsg(e));
+    return false;
+  }
+}
+
+const statPill = (dot, text) => h('div', { class: 'stat-pill' }, h('span', { class: 'dot ' + dot }), text);
+
+async function eliminarAsignatura(id) {
+  const meta = S.index.get(id);
+  if (!meta) return;
+  const choice = await ask({
+    title: '¿Eliminar «' + meta.asignatura + '»?',
+    text: [h('p', null, 'Se borrará de tu cuenta, también en tus otros dispositivos. Tu archivo .json no se toca, así que puedes volver a subirlo cuando quieras.')],
+    choices: [
+      { id: 'del', label: 'Eliminar', kind: 'danger' },
+      { id: 'no', label: 'Cancelar' },
+    ],
+  });
+  if (choice !== 'del') return;
+  try {
+    await Backend.borrar(id);
+  } catch (e) {
+    console.error(e);
+    await notify('No se pudo eliminar', firebaseAuthMsg(e));
+    return;
+  }
+  S.index.delete(id);
+  S.data.delete(id);
+  if (pref.get('lastSubject') === id) pref.remove('lastSubject');
+  renderNetflix();
+}
+
+async function descargarAsignatura(id) {
+  const meta = S.index.get(id);
+  if (!meta) return;
+  try {
+    const data = await getData(id);
+    const json = JSON.stringify({ asignatura: meta.asignatura, subtitulo: meta.subtitulo || data.subtitulo, temas: data.temas }, null, 2);
+    const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    const a = h('a', { href: url, download: meta.asignatura.replace(/\s+/g, '_') + '_apuntes.json' });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (e) {
+    console.error(e);
+    await notify('No se pudo descargar', firebaseAuthMsg(e));
+  }
+}
+
+let editingId = null;
+
+function openEdit(id) {
+  const meta = S.index.get(id);
+  if (!meta) return;
+  editingId = id;
+  E.editName.value = meta.asignatura;
+  E.editImage.value = meta.image || '';
+  E.editMsg.textContent = '';
+  E.edit.showModal();
+  E.editName.focus();
+  E.editName.select();
+}
+
+E.editCancel.addEventListener('click', () => E.edit.close());
+E.edit.addEventListener('click', e => { if (e.target === E.edit) E.edit.close(); });
+E.editForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const meta = S.index.get(editingId);
+  if (!meta) { E.edit.close(); return; }
+  const name = plain(E.editName.value);
+  const image = E.editImage.value.trim();
+  if (!name) { E.editMsg.textContent = 'Escribe un nombre para la asignatura.'; E.editName.focus(); return; }
+  if (image && !safeImageUrl(image)) { E.editMsg.textContent = 'La portada debe ser un enlace http(s) a una imagen (o déjala en blanco).'; E.editImage.focus(); return; }
+  const key = nameKey(name);
+  if ([...S.index.values()].some(m => m.id !== meta.id && m.key === key)) { E.editMsg.textContent = 'Ya existe otra asignatura con ese nombre.'; E.editName.focus(); return; }
+  if (name === meta.asignatura && image === (meta.image || '')) { E.edit.close(); return; }
+
+  E.editSave.disabled = true;
+  E.editMsg.textContent = 'Guardando…';
+  try {
+    const patch = { asignatura: name, key, image, updatedAt: Date.now() };
+    await Backend.actualizarMeta(meta.id, patch);
+    S.index.set(meta.id, { ...meta, ...patch });
+    E.edit.close();
+    renderNetflix();
+  } catch (err) {
+    console.error(err);
+    E.editMsg.textContent = 'No se pudo guardar: ' + firebaseAuthMsg(err);
+  } finally {
+    E.editSave.disabled = false;
+  }
+});
+
+/* ====================================================================
+   AÑADIR ASIGNATURAS (subir .json, arrastrar o pegar)
+   ==================================================================== */
+const RES_ICON = { ok: '✓', warn: '!', err: '✕', info: 'i' };
+
+function openAdd() {
+  if (E.add.open) return;
+  E.report.hidden = true;
+  E.report.replaceChildren();
+  E.add.showModal();
+}
+E.addClose.addEventListener('click', () => E.add.close());
+E.add.addEventListener('click', e => { if (e.target === E.add) E.add.close(); });
+
+function resultCard(it) {
+  const card = h('div', { class: 'res ' + it.kind },
+    h('div', { class: 'res-head' },
+      h('span', { class: 'res-icon', 'aria-hidden': 'true', text: RES_ICON[it.kind] }),
+      h('div', { class: 'res-title', text: it.title })));
+  if (it.file) card.append(h('div', { class: 'res-file', text: it.file }));
+  (it.lines || []).forEach(l => card.append(h('p', { class: 'res-line', text: l })));
+  if (it.snippet) card.append(h('pre', { class: 'snippet' }, it.snippet.text + '\n', h('span', { class: 'caret', text: it.snippet.caret })));
+  if (it.list && it.list.length) card.append(h('ul', null, it.list.map(x => h('li', { text: x }))));
+  if (it.hint) card.append(h('p', { class: 'res-hint', text: it.hint }));
+  return card;
+}
+
+function renderReport(items) {
+  E.report.replaceChildren();
+  if (!items.length) { E.report.hidden = true; return; }
+  const done = h('button', { type: 'button', class: 'glow-btn small', text: 'Listo' });
+  done.addEventListener('click', () => E.add.close());
+  E.report.append(
+    h('div', { class: 'report-title', text: 'Resultado de la carga' }),
+    ...items.map(resultCard),
+    h('div', { class: 'report-actions' }, done));
+  E.report.hidden = false;
+  E.report.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  done.focus({ preventScroll: true });
+}
+
+function errorItem(file, err) {
+  if (err instanceof LoadError) {
+    return { kind: 'err', title: err.message, file, lines: err.detail ? [err.detail] : [], snippet: err.snippet || null, list: err.warnings || [], hint: err.hint || null };
+  }
+  console.error(err);
+  return { kind: 'err', title: 'No se pudo procesar el archivo.', file, lines: [String((err && err.message) || err)] };
+}
+
+function setBusy(busy) {
+  S.busy = busy;
+  E.pick.disabled = busy;
+  E.pasteLoad.disabled = busy;
+  E.pick.textContent = busy ? 'Leyendo…' : 'Elegir archivos';
+  E.drop.setAttribute('aria-busy', busy ? 'true' : 'false');
+}
+
+function fileEntries(fileList) {
+  return Array.from(fileList).map(f => {
+    const ext = (f.name.split('.').pop() || '').toLowerCase();
+    const okType = ext === 'json' || ext === 'txt' || /json|text/.test(f.type);
+    return { name: f.name, size: f.size, reject: okType ? null : '«' + f.name + '» no es un archivo .json.', read: () => f.text() };
+  });
+}
+
+function metaOf(final, chunks, bytes) {
+  return {
+    id: final.id, key: final.key, asignatura: final.asignatura, subtitulo: final.subtitulo || '', image: final.image || '',
+    temas: final.stats.temas, conceptos: final.stats.conceptos, trampas: final.stats.trampas,
+    chunks, bytes, addedAt: final.addedAt, updatedAt: final.updatedAt,
+  };
+}
+
+async function getDataSafe(meta) {
+  try { return await getData(meta.id); } catch (e) { console.warn('No se pudo leer lo ya guardado; se tratará como vacío:', e); return { temas: [] }; }
+}
+
+/** Devuelve true si no hubo ningún error. */
+async function ingest(entries) {
+  if (!entries.length || S.busy || !S.loaded) return false;
+  openAdd();
+  setBusy(true);
+  const items = [];
+  const fresh = [];
+  try {
+    const parsed = [];
+    for (const en of entries) {
+      try {
+        if (en.reject) throw new LoadError(en.reject, { kind: 'type' });
+        if (en.size > MAX_BYTES) throw new LoadError('El archivo pesa más de 25 MB; no parece un JSON de apuntes.', { kind: 'size' });
+        const { value, notes, continues } = readJSONText(await en.read());
+        const base = en.name.replace(/\.[^.]+$/, '');
+        const raws = subjectsFromRoot(value, base);
+        raws.forEach((raw, k) => {
+          try {
+            const { subject, warnings } = normalizeSubject(raw, base);
+            parsed.push({ file: en.name, subject, warnings, notes, continues });
+          } catch (err) {
+            items.push(errorItem(raws.length > 1 ? en.name + ' · asignatura ' + (k + 1) : en.name, err));
+          }
+        });
+      } catch (err) {
+        items.push(errorItem(en.name, err));
+      }
     }
 
-let view='',manage=false,fb=null;
-function show(v){view=v;$('#boot').hidden=true;$('#auth').hidden=v!=='auth';$('#home').hidden=v!=='home';$('#app').hidden=v!=='app';scrollTo(0,0)}
-function amsg(t){const m=$('#amsg');m.replaceChildren();if(t)m.append(h('div','error-box',t))}
-function renderHome(){
-  const g=$('#hgrid');g.replaceChildren();
-  $('#hsub').textContent=st.subs.length?'Elige una asignatura o añade otra subiendo su .json':'Aún no tienes asignaturas: sube el .json de la primera';
-  $('#mng').classList.toggle('active',manage);
-  st.subs.forEach((s,i)=>{
-    const t=s.temas[0],c=h('button','ncard'+(manage?' manage':'')),a=h('div','av',t.icono);
-    c.type='button';a.style.background=t.iconBg;c.append(a,h('div',null,s.asignatura));
-    if(manage)c.append(h('div','del','🗑'));
-    c.onclick=()=>{if(manage){st.subs.splice(i,1);st.cur=0;save();renderHome()}else{st.cur=i;st.topic='all';save();render();show('app')}};
-    g.append(c);
-  });
-  const ad=h('button','ncard add');ad.type='button';ad.append(h('div','av','＋'),h('div',null,'Añadir .json'));
-  ad.onclick=()=>$('#file').click();g.append(ad);
-}
-function home(){manage=false;renderHome();show('home')}
-async function entrar(){
-  const u=$('#u').value.trim(),p=$('#p').value;
-  if(!u||!p)return amsg('Escribe tu usuario y tu contraseña.');
-  if(!fb)return amsg('Aún no hay conexión con el servidor de cuentas. Comprueba tu conexión e inténtalo de nuevo.');
-  $('#go').disabled=true;amsg('');
-  try{
-    let em=u.includes('@')?u.toLowerCase():null;
-    if(!em)try{const s=await fb.get(fb.ref(fb.db,'usernames/'+claveUsuario(u)));em=(s.exists()&&s.val()&&s.val().email)||null}catch(_){}
-    await fb.signIn(fb.auth,em||(u.toLowerCase().replace(/[^a-z0-9._-]/g,'').replace(/^\.+|\.+$/g,'')||'usuario')+'@testzema.local',p);
-  }catch(e){
-    const c=e.code;
-    amsg(['auth/invalid-credential','auth/wrong-password','auth/user-not-found','auth/invalid-email'].includes(c)?'Usuario o contraseña incorrectos.':c==='auth/too-many-requests'?'Demasiados intentos. Espera un poco e inténtalo de nuevo.':c==='auth/network-request-failed'?'Sin conexión con el servidor.':'No se pudo entrar ('+(c||e.message)+').');
+    // Varias partes de la misma asignatura subidas a la vez se combinan solas.
+    const groups = new Map();
+    for (const p of parsed) {
+      const key = nameKey(p.subject.asignatura);
+      const g = groups.get(key);
+      if (!g) {
+        groups.set(key, { key, subject: p.subject, files: [p.file], warnings: [...p.warnings], notes: [...p.notes], continues: p.continues });
+      } else {
+        g.subject = mergeSubjects(g.subject, p.subject).subject;
+        if (!g.files.includes(p.file)) g.files.push(p.file);
+        g.warnings.push(...p.warnings);
+        g.notes.push(...p.notes);
+        g.continues = p.continues;
+      }
+    }
+
+    for (const g of groups.values()) {
+      const existing = [...S.index.values()].find(x => x.key === g.key);
+      const now = Date.now();
+      const extra = [];
+      let final;
+      let verb;
+
+      if (!existing) {
+        final = { ...g.subject, id: newId(g.subject.asignatura), key: g.key, image: '', addedAt: now, updatedAt: now };
+        verb = 'añadida';
+      } else {
+        const base = { ...existing, temas: (await getDataSafe(existing)).temas };
+        const plan = planMerge(base, g.subject);
+        const choice = await ask({
+          title: 'Ya tienes «' + existing.asignatura + '»',
+          text: [h('p', null,
+            'En tu cuenta hay ', h('strong', { text: plural(existing.temas, 'tema', 'temas') }),
+            '. El archivo trae ', h('strong', { text: plural(g.subject.temas.length, 'tema', 'temas') }),
+            ': ' + plural(plan.added, 'nuevo', 'nuevos') + ' y ' + plural(plan.replaced, 'que ya existe', 'que ya existen') + '.')],
+          choices: [
+            { id: 'merge', label: 'Combinar', desc: 'Añade los temas nuevos y actualiza los que coinciden por título.', kind: 'primary' },
+            { id: 'replace', label: 'Reemplazar todo', desc: 'Sustituye la asignatura guardada por este archivo.' },
+            { id: 'copy', label: 'Guardar como otra', desc: 'Crea una asignatura nueva y deja la actual como está.' },
+            { id: 'skip', label: 'Cancelar' },
+          ],
+        });
+        if (choice === 'merge') {
+          const m = mergeSubjects(base, g.subject);
+          final = { ...m.subject, id: existing.id, key: g.key, image: existing.image || '', addedAt: existing.addedAt, updatedAt: now };
+          verb = 'combinada';
+          extra.push(plural(m.added, 'tema nuevo', 'temas nuevos') + ' y ' + plural(m.replaced, 'tema actualizado', 'temas actualizados') + '.');
+        } else if (choice === 'replace') {
+          final = { ...g.subject, id: existing.id, key: g.key, image: existing.image || '', addedAt: existing.addedAt, updatedAt: now };
+          verb = 'reemplazada';
+        } else if (choice === 'copy') {
+          const name = uniqueName(g.subject.asignatura, new Set([...S.index.values()].map(x => x.key)));
+          final = { ...g.subject, asignatura: name, id: newId(name), key: nameKey(name), image: '', addedAt: now, updatedAt: now };
+          verb = 'añadida como copia';
+        } else {
+          items.push({ kind: 'info', title: '«' + g.subject.asignatura + '» no se ha cambiado.', file: g.files.join(', ') });
+          continue;
+        }
+      }
+
+      try {
+        const meta = await Backend.guardar(final);
+        S.index.set(final.id, metaOf(final, meta.chunks, meta.bytes));
+        S.data.set(final.id, { subtitulo: final.subtitulo, temas: final.temas });
+        fresh.push(final.id);
+      } catch (e) {
+        console.error(e);
+        items.push({
+          kind: 'err',
+          title: 'No se pudo guardar «' + final.asignatura + '» en tu cuenta.',
+          file: g.files.join(', '),
+          lines: [firebaseAuthMsg(e)],
+          hint: esPermisoDenegado(e) ? 'Las reglas de Realtime Database tienen que permitir escribir en usuarios/<tu uid>/ (es donde Testzema guarda tus bancos).' : null,
+        });
+        continue;
+      }
+
+      const st = final.stats;
+      const list = [...new Set(g.notes)];
+      list.push(...g.warnings.slice(0, 8));
+      if (g.warnings.length > 8) list.push('… y ' + (g.warnings.length - 8) + ' avisos más.');
+      items.push({
+        kind: g.warnings.length ? 'warn' : 'ok',
+        title: '«' + final.asignatura + '» ' + verb + '.',
+        file: g.files.join(', '),
+        lines: [plural(st.temas, 'tema', 'temas') + ', ' + plural(st.conceptos, 'concepto', 'conceptos') +
+          (st.trampas ? ' y ' + plural(st.trampas, 'trampa de examen', 'trampas de examen') : '') + '.', ...extra],
+        list,
+        hint: g.continues ? 'Este archivo indica que continúa: sube también la siguiente parte y se combinará con esta.' : null,
+      });
+    }
+  } finally {
+    setBusy(false);
   }
-  $('#go').disabled=false;
+
+  S.fresh = new Set(fresh);
+  renderNetflix();
+  renderReport(items);
+  return !items.some(i => i.kind === 'err');
 }
-$('#go').onclick=entrar;
-$('#u').onkeydown=e=>{if(e.key==='Enter')$('#p').focus()};
-$('#p').onkeydown=e=>{if(e.key==='Enter')entrar()};
-$('#mng').onclick=()=>{manage=!manage;renderHome()};
-$('#out').onclick=()=>fb&&fb.out(fb.auth);
-$('#back').onclick=home;
-setTimeout(()=>{if(!view){show('auth');amsg('El servidor de cuentas no responde. Comprueba tu conexión y recarga la página.')}},8000);
-(async()=>{
-  const V='https://www.gstatic.com/firebasejs/10.12.2/';
-  try{
-    const {initializeApp}=await import(V+'firebase-app.js'),{getDatabase,ref,get}=await import(V+'firebase-database.js'),A=await import(V+'firebase-auth.js');
-    const app=initializeApp(firebaseConfig),auth=A.getAuth(app);
-    fb={auth,db:getDatabase(app,firebaseConfig.databaseURL),ref,get,signIn:A.signInWithEmailAndPassword,out:A.signOut};
-    A.onAuthStateChanged(auth,u=>{
-      if(u){loadState(u.uid);$('#who').textContent='👤 '+(u.displayName||(u.email||'').split('@')[0]||'Usuario');$('#p').value='';home()}
-      else{KEY='';st={subs:[],cur:0,topic:'all'};show('auth')}
-    });
-  }catch(e){show('auth');amsg('No se pudo conectar con el servidor de cuentas. Comprueba tu conexión; si lo ves dentro de Claude, descarga el archivo y ábrelo en tu navegador.')}
+
+E.pick.addEventListener('click', () => E.file.click());
+E.file.addEventListener('change', () => {
+  const files = Array.from(E.file.files || []);
+  E.file.value = '';
+  ingest(fileEntries(files));
+});
+
+const setPaste = open => {
+  E.pastePanel.hidden = !open;
+  E.pasteBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) E.pasteText.focus();
+};
+E.pasteBtn.addEventListener('click', () => setPaste(E.pastePanel.hidden));
+E.pasteCancel.addEventListener('click', () => setPaste(false));
+E.pasteLoad.addEventListener('click', async () => {
+  const text = E.pasteText.value;
+  if (!text.trim()) { E.pasteText.focus(); return; }
+  const ok = await ingest([{ name: 'JSON pegado', size: text.length, read: async () => text }]);
+  if (ok) { E.pasteText.value = ''; setPaste(false); }
+});
+
+// Arrastrar y soltar en cualquier parte (y que el navegador no abra el archivo).
+const hasFiles = e => !!e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+const canDrop = () => !!S.user && S.loaded && (E.netflix.classList.contains('show') || E.add.open);
+let dragDepth = 0;
+window.addEventListener('dragenter', e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  dragDepth++;
+  if (canDrop()) E.drop.classList.add('over');
+});
+window.addEventListener('dragover', e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = canDrop() ? 'copy' : 'none';
+});
+window.addEventListener('dragleave', e => {
+  if (!hasFiles(e)) return;
+  dragDepth = Math.max(0, dragDepth - 1);
+  if (!dragDepth) E.drop.classList.remove('over');
+});
+window.addEventListener('drop', e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  dragDepth = 0;
+  E.drop.classList.remove('over');
+  if (canDrop() && !E.dlg.open) ingest(fileEntries(e.dataTransfer.files));
+});
+
+/* ====================================================================
+   VISOR DE ASIGNATURA
+   ==================================================================== */
+function renderBlock(b) {
+  switch (b.tipo) {
+    case 'answer':
+      return h('div', { class: 'answer-box' },
+        b.label ? h('div', { class: 'answer-label' }, rich(b.label)) : null,
+        h('div', { class: 'answer-text rich' }, rich(b.html)));
+    case 'blockquote':
+      return h('div', { class: 'blockquote rich' }, rich(b.html));
+    case 'error':
+      return h('div', { class: 'error-box rich' }, rich(b.html));
+    case 'formula':
+      return h('div', { class: 'formula' },
+        b.titulo ? h('div', { class: 'formula-title' }, rich(b.titulo)) : null,
+        h('div', { class: 'rich' }, rich(b.html)));
+    case 'grid2':
+      return h('div', { class: 'grid-2' }, b.columnas.map(c =>
+        h('div', { class: 'mini-card rich' },
+          c.titulo ? h('div', { class: 'mini-title' }, rich(c.titulo)) : null,
+          rich(c.html))));
+    case 'tabla': {
+      const cols = Math.max(b.cabeceras.length, ...b.filas.map(r => r.length));
+      const idx = Array.from({ length: cols }, (_, i) => i);
+      const head = b.cabeceras.length
+        ? h('thead', null, h('tr', null, idx.map(i => h('th', null, rich(b.cabeceras[i] || '')))))
+        : null;
+      const rows = b.filas.map(r => (r.length === 1 && cols > 1
+        ? h('tr', null, h('td', { colspan: String(cols) }, rich(r[0])))
+        : h('tr', null, idx.map(i => h('td', null, rich(r[i] || ''))))));
+      return h('div', { class: 'table-wrap' }, h('table', { class: 'data-table' }, head, h('tbody', null, rows)));
+    }
+    default:
+      return null;
+  }
+}
+
+function buildCard(c) {
+  const body = h('div', { class: 'concept-body' });
+  const header = h('div', { class: 'concept-header', role: 'button', tabindex: '0', 'aria-expanded': 'false' },
+    h('div', { class: 'concept-q' },
+      c.tag ? h('span', { class: 'tag tag-' + c.tagColor, text: c.tag }) : null,
+      rich(c.pregunta)),
+    h('div', { class: 'toggle-icon', 'aria-hidden': 'true', text: '+' }));
+  const card = h('article', { class: 'concept-card' }, header, body);
+
+  let built = false;
+  card._setOpen = open => {
+    if (open && !built) { built = true; c.bloques.forEach(b => { const n = renderBlock(b); if (n) body.append(n); }); }
+    card.classList.toggle('open', open);
+    header.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  header.addEventListener('click', () => { S.auto.delete(card); card._setOpen(!card.classList.contains('open')); });
+  header.addEventListener('keydown', e => {
+    if (e.target !== header) return; // si se está escribiendo dentro de la pregunta (modo edición), no se toca
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); header.click(); }
+  });
+  return card;
+}
+
+function searchText(c) {
+  const parts = [c.tag, c.pregunta];
+  for (const b of c.bloques) {
+    if (b.html) parts.push(b.html);
+    if (b.label) parts.push(b.label);
+    if (b.titulo) parts.push(b.titulo);
+    if (b.columnas) b.columnas.forEach(k => parts.push(k.titulo || '', k.html));
+    if (b.cabeceras) parts.push(...b.cabeceras);
+    if (b.filas) b.filas.forEach(r => parts.push(...r));
+  }
+  return norm(parts.join(' '));
+}
+
+function buildNav(s) {
+  const pill = (id, label, full) => h('button', { type: 'button', class: 'topic-btn', 'data-topic': id, title: full || label, text: label });
+  E.pills.replaceChildren(
+    pill('all', 'Todos'),
+    ...s.temas.map(t => pill(t.id, plain(t.navLabel) || plain(t.titulo), plain(t.titulo))));
+  E.nav.classList.remove('open', 'clamp');
+  E.more.hidden = true;
+}
+
+function buildSections(s) {
+  S.sections = [];
+  S.cards = [];
+  const frag = document.createDocumentFragment();
+  for (const t of s.temas) {
+    const icon = h('div', { class: 'section-icon', 'aria-hidden': 'true', text: t.icono });
+    icon.style.background = t.iconBg;
+    const el = h('section', { class: 'topic-section', 'data-topic': t.id },
+      h('div', { class: 'section-header' }, icon,
+        h('h2', { class: 'section-title', text: t.titulo }),
+        h('div', { class: 'section-count', text: plural(t.conceptos.length, 'concepto', 'conceptos') })));
+    const sec = { id: t.id, el, cards: [] };
+    for (const c of t.conceptos) {
+      const card = buildCard(c);
+      el.append(card);
+      const item = { el: card, search: searchText(c) };
+      sec.cards.push(item);
+      S.cards.push(item);
+    }
+    S.sections.push(sec);
+    frag.append(el);
+  }
+  E.sections.replaceChildren(frag);
+}
+
+function applyFilters() {
+  const terms = norm(S.query).split(' ').filter(Boolean);
+  const searching = terms.length > 0;
+  let shown = 0;
+
+  for (const sec of S.sections) {
+    let n = 0;
+    for (const c of sec.cards) {
+      const match = !searching || terms.every(t => c.search.includes(t));
+      c.el.hidden = !match;
+      if (match) n++;
+    }
+    const visible = n > 0 && (searching || S.topic === 'all' || S.topic === sec.id);
+    sec.el.hidden = !visible;
+    if (visible) shown += n;
+  }
+
+  E.pills.querySelectorAll('.topic-btn').forEach(b => {
+    b.classList.toggle('active', !searching && b.dataset.topic === S.topic);
+  });
+
+  // La búsqueda abre sola las tarjetas que coinciden (si no son demasiadas) y las cierra al limpiarla.
+  const autoOpen = searching && shown <= AUTO_OPEN_MAX;
+  for (const c of S.cards) {
+    const el = c.el;
+    if (autoOpen && !el.hidden) {
+      if (!el.classList.contains('open')) { el._setOpen(true); S.auto.add(el); }
+    } else if (S.auto.has(el)) {
+      el._setOpen(false);
+      S.auto.delete(el);
+    }
+  }
+
+  E.count.textContent = searching ? plural(shown, 'resultado', 'resultados') : '';
+  E.none.hidden = !(searching && shown === 0);
+  if (!E.none.hidden) E.none.textContent = 'Nada coincide con «' + S.query.trim() + '». Prueba con otra palabra o con menos letras.';
+}
+
+function selectTopic(id) {
+  if (S.query) { S.query = ''; E.q.value = ''; }
+  S.topic = id;
+  applyFilters();
+  if (E.nav.classList.contains('open')) { E.nav.classList.remove('open'); setMoreLabel(); }
+  E.sections.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateNavClamp() {
+  if (E.subject.hidden || !S.subject) return;
+  E.nav.classList.remove('clamp');
+  const limited = E.pills.scrollHeight > 128;
+  E.nav.classList.toggle('clamp', limited);
+  E.more.hidden = !limited;
+  if (limited) setMoreLabel();
+}
+function setMoreLabel() {
+  const open = E.nav.classList.contains('open');
+  E.more.textContent = open ? 'Ver menos' : 'Ver los ' + S.subject.temas.length + ' temas';
+  E.more.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+E.more.addEventListener('click', () => { E.nav.classList.toggle('open'); setMoreLabel(); });
+window.addEventListener('resize', debounce(updateNavClamp, 150));
+
+E.pills.addEventListener('click', e => {
+  const b = e.target.closest('.topic-btn');
+  if (b) selectTopic(b.dataset.topic);
+});
+
+E.q.addEventListener('input', debounce(() => { S.query = E.q.value; applyFilters(); }, 120));
+E.q.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && E.q.value) { E.q.value = ''; S.query = ''; applyFilters(); }
+});
+
+const visibleCards = () => S.cards.filter(c => !c.el.hidden && !c.el.closest('[hidden]'));
+E.openAll.addEventListener('click', () => { S.auto.clear(); visibleCards().forEach(c => c.el._setOpen(true)); });
+E.closeAll.addEventListener('click', () => { S.auto.clear(); visibleCards().forEach(c => c.el._setOpen(false)); });
+
+E.back.addEventListener('click', goNetflix);
+
+/* ====================================================================
+   PUENTE CON LA CAJA DE MODOS VISUALES
+   El modo edición (copiado tal cual) guarda con loadData(nombre) / saveData(nombre, datos)
+   y lee el nombre en #topbar-title. Aquí esas piezas apuntan a la asignatura abierta en esta
+   página, que vive en la cuenta (nube). Solo se escribe si algo ha cambiado.
+   ==================================================================== */
+let editSnapshot = '';
+
+window.loadData = () => {
+  const d = S.subject ? S.data.get(S.subject.id) : null;
+  editSnapshot = d ? JSON.stringify(d) : '';
+  return d || null;
+};
+
+window.saveData = async (_nombre, data) => {
+  const meta = S.subject ? S.index.get(S.subject.id) : null;
+  if (!meta || JSON.stringify(data) === editSnapshot) return;
+  const final = {
+    id: meta.id, key: meta.key, asignatura: meta.asignatura, subtitulo: meta.subtitulo || data.subtitulo || '',
+    image: meta.image || '', addedAt: meta.addedAt, updatedAt: Date.now(),
+    temas: data.temas, stats: computeStats({ temas: data.temas }),
+  };
+  try {
+    const saved = await Backend.guardar(final);
+    S.index.set(final.id, metaOf(final, saved.chunks, saved.bytes));
+    editSnapshot = JSON.stringify(data);
+    // la búsqueda debe encontrar también el texto recién editado
+    S.sections.forEach((sec, ti) => sec.cards.forEach((item, ci) => {
+      const c = S.subject.temas[ti] && S.subject.temas[ti].conceptos[ci];
+      if (c) item.search = searchText(c);
+    }));
+  } catch (e) {
+    console.error(e);
+    notify('No se pudieron guardar los cambios', firebaseAuthMsg(e));
+  }
+};
+
+// En esta página el cuerpo de cada tarjeta se dibuja al abrirla: antes de entrar en edición se abren todas.
+const toggleEditorOriginal = window.toggleEditor;
+window.toggleEditor = function () {
+  if (!document.body.classList.contains('edit-mode')) S.cards.forEach(c => c.el._setOpen(true));
+  return toggleEditorOriginal.apply(this, arguments);
+};
+
+/* ====================================================================
+   ARRANQUE
+   ==================================================================== */
+(async function boot() {
+  showScreen('netflix', { booting: true });
+  authSetModo('login');
+  authSetMsg('Inicializando Firebase…');
+  const tooSlow = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000));
+  try {
+    await Promise.race([iniciarFirebase(handleAuth), tooSlow]);
+  } catch (e) {
+    console.error('Firebase no pudo inicializarse:', e);
+    if (!S.user) {
+      showScreen('auth');
+      authSetMsg(e && e.message === 'timeout'
+        ? 'Firebase tarda demasiado en responder. Revisa tu conexión y recarga la página.'
+        : 'No se ha podido cargar Firebase. Revisa tu conexión y recarga la página.', 'err');
+    }
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateNavClamp);
 })();
 </script>
 </body>
